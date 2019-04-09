@@ -18,7 +18,7 @@ From NTL-LTER site under metadata section:
 
 ### Site descriptors 
 
-Site discriptors include lake name, date, time, and depth. The number of lakes that were sampled were equal to 74. However to have a better understanding of chemical and physical parameter trends, the five lakes with the most observations were used: Toolik Lake, Lake E5, Lake Fog 2, Lake I2, Lake Fog 1, and Lake I6. Time was also recorded in Alaska Daylight Savings Time. 
+Site discriptors include lake name, date, time, and depth. The number of lakes that were sampled were equal to 74. However to have a better understanding of chemical and physical parameter trends, the five lakes with the most observations were used: Toolik Lake, Lake E5, Lake Fog 2, Lake I5, and Lake I7. Time was also recorded in Alaska Daylight Savings Time. 
 
 
 ### Physical and Chemical variables 
