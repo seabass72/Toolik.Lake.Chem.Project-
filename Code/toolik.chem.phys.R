@@ -13,6 +13,7 @@ library(multcompView)
 library(naniar)
 library(chron)
 library(reshape2)
+library(ggpubr)
 
 
 # theme for project 
@@ -182,15 +183,103 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  
  
  
- # Water quality Measurements accross the five lakes 
+ # Water quality Measurements accross the five lakes (use gg arrange to make a graph with 5 plots)
  
- WATER_Q_PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Temp_C ))+
-   geom_boxplot()
+ 
+ #  temperature plot
+ 
+ LAKE.v.TEMP.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Temp_C, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab(expression("Temperature"*~degree*C))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                   size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" Temperature ")+
+   theme(plot.title = element_text(hjust = 0.5))
    
-   
-  WATER_Q_PLOT
+ LAKE.v.TEMP.PLOT
+ 
+ # conductivity plot 
  
  
+ LAKE.v.COND.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Cond_uS, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab("Conductivity (uS/cm)")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" Conductivity ")+
+   theme(plot.title = element_text(hjust = 0.5))
+ 
+ LAKE.v.COND.PLOT
+ 
+ #pH plot
+ LAKE.v.pH.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = pH, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab("pH")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" pH  ")+
+   theme(plot.title = element_text(hjust = 0.5))
+ 
+ LAKE.v.pH.PLOT
+ 
+ # dissolved oxygen plot
+ 
+ LAKE.v.DO.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab("DO (mg/L)")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" Dissolved Oxygen ")+
+   theme(plot.title = element_text(hjust = 0.5))
+ 
+ LAKE.v.DO.PLOT
+ 
+ # chla plot
+ 
+ LAKE.v.chla.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Chla_ug, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab(expression("Chla Concentration"~"("*mu*g/L*")"))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" Chlorophyll a ")+
+   theme(plot.title = element_text(hjust = 0.5))
+ 
+ LAKE.v.chla.PLOT
 
+ # using gg arrange to put all the plots together 
+ 
+ WATER_Q_Total_Plot <- ggarrange(LAKE.v.TEMP.PLOT, LAKE.v.COND.PLOT, LAKE.v.DO.PLOT, LAKE.v.pH.PLOT, LAKE.v.chla.PLOT, ncol = 2, nrow = 3)
+ WATER_Q_Total_Plot_complete<-annotate_figure(WATER_Q_Total_Plot,
+                 top = text_grob("Distribution of Physical and Chemical Water Quality parameters for Lakes in the Toolik Region", color = "black", face = "bold", size = 14))
 
-
+ WATER_Q_Total_Plot_complete
