@@ -14,6 +14,7 @@ library(naniar)
 library(chron)
 library(reshape2)
 library(ggpubr)
+library(FSA)
 
 
 # theme for project 
@@ -282,3 +283,117 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                  top = text_grob("Distribution of Physical and Chemical Water Quality parameters for Lakes in the Toolik Region", color = "black", face = "bold", size = 14))
 
  WATER_Q_Total_Plot_complete
+ 
+ 
+ ################## Data Analysis section
+ 
+ # 1 separate water quality parameters for each of the five lakes 
+ 
+  #A Toolik Lake
+  ARC.PhysChem.Toolik.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="Toolik")
+  
+  #B LAke E5
+  
+  ARC.PhysChem.E5.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="E5")
+  
+  #C Lake FOG 2
+  
+  ARC.PhysChem.FOG_2.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="Fog 2")
+  
+  #D Lake I7
+  
+  ARC.PhysChem.I7.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="I7")
+  
+  #E Lake I5
+  
+  ARC.PhysChem.I5.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="I5")
+ 
+ 
+ #2 Check for Normality in the physical and Chemical parameters(temp, cond, pH, DO, and chla)
+ 
+    #A Toolik Lake Normality shapiro wilks test
+  
+          shapiro.test(ARC.PhysChem.Toolik.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.Toolik.processed$pH)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.Toolik.processed$PAR)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Secchi_Depth)
+          
+          
+   #B  Lake E5 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.E5.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.E5.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.E5.processed$pH)
+          shapiro.test(ARC.PhysChem.E5.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.E5.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.E5.processed$PAR)
+          shapiro.test(ARC.PhysChem.E5.processed$Secchi_Depth)
+  
+  #C Lake Fog 2 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$pH)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$PAR)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Secchi_Depth)
+          
+    #D Lake I7 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.I7.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.I7.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.I7.processed$pH)
+          shapiro.test(ARC.PhysChem.I7.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.I7.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.I7.processed$PAR)
+          shapiro.test(ARC.PhysChem.I7.processed$Secchi_Depth)
+  
+  
+    #E Lake I5 Normality shapiro wilks test
+  
+         shapiro.test(ARC.PhysChem.I5.processed$Temp_C)
+         shapiro.test(ARC.PhysChem.I5.processed$Cond_uS)
+         shapiro.test(ARC.PhysChem.I5.processed$pH)
+         shapiro.test(ARC.PhysChem.I5.processed$Chla_ug)
+         shapiro.test(ARC.PhysChem.I5.processed$Dissolved_Oxygen)
+         shapiro.test(ARC.PhysChem.I5.processed$PAR)
+         shapiro.test(ARC.PhysChem.I5.processed$Secchi_Depth)
+         
+ # 2 check for the homogeneity of variances between the 5 major lakes for water quality parameters
+ 
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Secchi_Depth ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         
+################ 1 Statistical test significant difference betweem 5 lakes for (temp, cond, pH, DO, and chla)
+         
+         
+         # A. significant difference between lakes for (temp, cond, pH, DO, and chla) using kruskal wallis test
+         
+        Kruskal_Temp <-kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+        Kruskal_Cond <- kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+        Kruskal_pH <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+        Kruskal_Chla <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+        Kruskal_DO <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+       
+        # B. see which lake are significant different for (temp, cond, pH, DO, and chla) using the dunn test
+        
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , ARC.PhysChem.5_major_Lakes.processed$Site)
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Cond_uS , ARC.PhysChem.5_major_Lakes.processed$Site)
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$pH , ARC.PhysChem.5_major_Lakes.processed$Site)
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Chla_ug , ARC.PhysChem.5_major_Lakes.processed$Site)
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen , ARC.PhysChem.5_major_Lakes.processed$Site)
+        
