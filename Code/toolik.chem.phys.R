@@ -37,69 +37,69 @@ theme_Final_Project <- theme_classic(base_size = 12) +
 
 # import the raw dataset 
 
-Toolik_raw <- read.csv("./Data/RAW/ARC_Lakes_Physchem_2010-2014.csv")
+ARC.PhysChem.2010_14.Raw <- read.csv("./Data/RAW/ARC_Lakes_Physchem_2010-2014.csv")
 
 # view the dataset
 
-View(Toolik_raw)
+View(ARC.PhysChem.2010_14.Raw)
 
 
 ########################### Clean up the Dataset #############################
 
 # 1 remove unnessary columns 
 
-Toolik_selected_columns <- Toolik_raw %>%
+ARC.PhysChem.selectedcolumns.Raw <- ARC.PhysChem.2010_14.Raw %>%
   select("Site", "Date", "Rounded.Depth..m.", "Time_hr_dst","Temp_C","Cond_uS", "pH","DO_mg.l","Chl_ug.l" , "PAR_uEm2s", "Secchi_m" ) 
   
 # 2 make periods (missing values into NAs)
   
-  Toolik_selected_columns[ Toolik_selected_columns == "." ] <- NA
-  Toolik_selected_columns[ Toolik_selected_columns == "" ] <- NA
+  ARC.PhysChem.selectedcolumns.Raw[ ARC.PhysChem.selectedcolumns.Raw == "." ] <- NA
+  ARC.PhysChem.selectedcolumns.Raw[ ARC.PhysChem.selectedcolumns.Raw == "" ] <- NA
   
 # 3 rename the columns with simpler names 
   
-colnames(Toolik_selected_columns) <- c("Site", "Date", "Depth_m", "Time_hr","Temp_C", "Cond_uS", "pH","Dissolved_Oxygen","Chla_ug", "PAR", "Secchi_Depth"  )
+colnames(ARC.PhysChem.selectedcolumns.Raw) <- c("Site", "Date", "Depth_m", "Time_hr","Temp_C", "Cond_uS", "pH","Dissolved_Oxygen","Chla_ug", "PAR", "Secchi_Depth"  )
   
   
 # 4 remove rows that have nas
   
-Toolik_no_nas <- drop_na(Toolik_selected_columns)
+ARC.PhysChem.2010_2014.cleaned <- drop_na(ARC.PhysChem.selectedcolumns.Raw)
 
 # 5 change columns that are numbers that are miss cateloged as factors with as.numeric and as.character
 
-Toolik_no_nas$Depth_m <- as.numeric(as.character(Toolik_no_nas$Depth_m))
+ARC.PhysChem.2010_2014.cleaned$Depth_m <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$Depth_m))
 
-Toolik_no_nas$Temp_C <- as.numeric(as.character(Toolik_no_nas$Temp_C))
+ARC.PhysChem.2010_2014.cleaned$Temp_C <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$Temp_C))
 
-Toolik_no_nas$Cond_uS <- as.numeric(as.character(Toolik_no_nas$Cond_uS))
+ARC.PhysChem.2010_2014.cleaned$Cond_uS <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$Cond_uS))
 
-Toolik_no_nas$pH <- as.numeric(as.character(Toolik_no_nas$pH))
+ARC.PhysChem.2010_2014.cleaned$pH <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$pH))
 
-Toolik_no_nas$Dissolved_Oxygen <- as.numeric(as.character(Toolik_no_nas$Dissolved_Oxygen))
+ARC.PhysChem.2010_2014.cleaned$Dissolved_Oxygen <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$Dissolved_Oxygen))
 
-Toolik_no_nas$Chla_ug <- as.numeric(as.character(Toolik_no_nas$Chla_ug))
+ARC.PhysChem.2010_2014.cleaned$Chla_ug <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$Chla_ug))
 
-Toolik_no_nas$PAR <- as.numeric(as.character(Toolik_no_nas$PAR))
+ARC.PhysChem.2010_2014.cleaned$PAR <- as.numeric(as.character(ARC.PhysChem.2010_2014.cleaned$PAR))
 
-Toolik_no_nas$Secchi_Depth <- as.character(Toolik_no_nas$Secchi_Depth)
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth <- as.character(ARC.PhysChem.2010_2014.cleaned$Secchi_Depth)
 
-Toolik_no_nas$Time_hr <- as.character(Toolik_no_nas$Time_hr)
+ARC.PhysChem.2010_2014.cleaned$Time_hr <- as.character(ARC.PhysChem.2010_2014.cleaned$Time_hr)
 
 # 5 make sure that date column is in the date format 
 
-Toolik_no_nas$Date <- as.Date(Toolik_no_nas$Date, "%d-%B-%y")
+ARC.PhysChem.2010_2014.cleaned$Date <- as.Date(ARC.PhysChem.2010_2014.cleaned$Date, "%d-%B-%y")
 
 
 # 6 make secchi depths where hit bottom a number instead of a character (-1)
 
-Toolik_no_nas$Secchi_Depth[Toolik_no_nas$Secchi_Depth == ">Xm"] <- -1
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth[ARC.PhysChem.2010_2014.cleaned$Secchi_Depth == ">Xm"] <- -1
 
-Toolik_no_nas$Secchi_Depth <- as.numeric(Toolik_no_nas$Secchi_Depth)
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth <- as.numeric(ARC.PhysChem.2010_2014.cleaned$Secchi_Depth)
 
 
 # 8 Save the processed dataset
 
-write.csv(Toolik_no_nas,file = "./Data/Processed/Toolik_Chem_Phys_Processed.csv",row.names = FALSE)
+write.csv(ARC.PhysChem.2010_2014.cleaned,file = "./Data/Processed/ARC.PhysChem.2010_2014.Processed.csv",row.names = FALSE)
 
 
 ######################## Part 2 data Exploration ######################################
@@ -109,30 +109,29 @@ write.csv(Toolik_no_nas,file = "./Data/Processed/Toolik_Chem_Phys_Processed.csv"
 
 # working with the cleaned dataset
 
-Toolik_Processed<- Toolik_no_nas
+ARC.PhysChem.2010_2014.processed<- ARC.PhysChem.2010_2014.cleaned
 
-#convert back to Date
 
 
 # 1 look at the summary for each of the columns present in the dataset
 
-summary(Toolik_Processed)
+summary(ARC.PhysChem.2010_2014.processed)
   
 # 2 the first 5 rows of the dataset 
 
-head(Toolik_Processed)
+head(ARC.PhysChem.2010_2014.processed)
 
 # 3 structure of dataframe
 
-str(Toolik_Processed)
+str(ARC.PhysChem.2010_2014.processed)
 
 # 4 dimensions of the dataset
 
-dim(Toolik_Processed)
+dim(ARC.PhysChem.2010_2014.processed)
 
 # 5 column names in the proceesed Toolik dataset
 
-colnames(Toolik_Processed)
+colnames(ARC.PhysChem.2010_2014.processed)
 
 
 ############### Data Exploration Graphs 
@@ -143,18 +142,18 @@ colnames(Toolik_Processed)
 
 #filter for lakes with the most observations (top 5)
 
-Toolik_5_MAJOR_Lakes <- Toolik_Processed %>%
+ARC.PhysChem.5_major_Lakes.processed <- ARC.PhysChem.2010_2014.processed %>%
   filter(Site == "Toolik"| Site == "E5" | Site == "Fog 2"|  Site == "I7"|  Site == "I5")
 
 
 
-CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, color = Site)) +
+CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Depth_m, color = Site)) +
   geom_point()+
   theme_Final_Project+
   scale_y_reverse( lim=c(20,0))+
   scale_colour_manual(values = c('#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'))+
   ylab("Depth (m)")+
-  xlab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+  xlab(expression("Chlorophyll a Concentration"~"("*mu*g/L*")"))+
   ggtitle(" Chlorophyll a Concentrations vs. Depth for Lakes in the Toolik Region, Alaska")+
   theme(plot.title = element_text(hjust = 0.5))+
   labs(color='Lake Name')
@@ -164,7 +163,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  
  # 2 plot to see how chlorophyll a changes over Time (2010-2014)
  
- CHLA_Time_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Date, y= Chla_ug, color = Site)) +
+ CHLA_Time_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Date, y= Chla_ug, color = Site)) +
    geom_point()+
    theme_Final_Project+
    scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
@@ -188,7 +187,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  
  #  temperature plot
  
- LAKE.v.TEMP.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Temp_C, fill =Site ))+
+ LAKE.v.TEMP.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Temp_C, fill =Site ))+
    geom_boxplot()+
    theme_Final_Project+
    xlab("Lake Name")+
@@ -207,7 +206,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  # conductivity plot 
  
  
- LAKE.v.COND.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Cond_uS, fill =Site ))+
+ LAKE.v.COND.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Cond_uS, fill =Site ))+
    geom_boxplot()+
    theme_Final_Project+
    xlab("Lake Name")+
@@ -224,7 +223,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  LAKE.v.COND.PLOT
  
  #pH plot
- LAKE.v.pH.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = pH, fill =Site ))+
+ LAKE.v.pH.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = pH, fill =Site ))+
    geom_boxplot()+
    theme_Final_Project+
    xlab("Lake Name")+
@@ -242,7 +241,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  
  # dissolved oxygen plot
  
- LAKE.v.DO.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
+ LAKE.v.DO.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
    geom_boxplot()+
    theme_Final_Project+
    xlab("Lake Name")+
@@ -260,7 +259,7 @@ CHLA_DEPTH_PLOT <-  ggplot(Toolik_5_MAJOR_Lakes, aes(x= Chla_ug, y= Depth_m, col
  
  # chla plot
  
- LAKE.v.chla.PLOT <- ggplot(Toolik_5_MAJOR_Lakes, aes(x= Site, y = Chla_ug, fill =Site ))+
+ LAKE.v.chla.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Chla_ug, fill =Site ))+
    geom_boxplot()+
    theme_Final_Project+
    xlab("Lake Name")+
