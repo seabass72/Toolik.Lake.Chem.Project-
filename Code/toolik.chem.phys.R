@@ -16,6 +16,7 @@ library(reshape2)
 library(ggpubr)
 library(FSA)
 library(corrplot)
+library(trend)
 
 
 # theme for project 
@@ -401,25 +402,25 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
 ################ 2 Statistical test multiple linear regression to determine what factors are important in Chla concentrations
 
 # 1 remove chla concentrations that are zero for log transformation of dependent variable
-        ARC.PhysChem.5_major_Lakes.nozeros<- ARC.PhysChem.5_major_Lakes.processed %>%
-        filter(Chla_ug > 0)
+        ARC.PhysChem.all_Lakes.nozeros<- ARC.PhysChem.2010_2014.processed %>%
+        filter(Chla_ug > 0 )
         
         
 # check normality of the of dependent variable (chlorophyll a) with log transformation
         
         # use the shapiro wilks test to test normality
         
-        shapiro.test(log(ARC.PhysChem.5_major_Lakes.nozeros$Chla_ug)) # much improved (p value = 10^-16 -> 0.0006)
+        shapiro.test(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug)) # much improved (p value = 10^-16 -> 0.00214)
         
         # look at the improvement in qqplot 
         
-        qqnorm(log(ARC.PhysChem.5_major_Lakes.nozeros$Chla_ug))
-        qqline(log(ARC.PhysChem.5_major_Lakes.nozeros$Chla_ug))
+        qqnorm(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug))
+        qqline(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug))
         
         
 # multiple linear regression (full model)
         
-CHLA_MODEL <- lm(data = ARC.PhysChem.5_major_Lakes.nozeros, log(Chla_ug)~Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth)
+CHLA_MODEL <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth)
 
 summary(CHLA_MODEL)
 
@@ -443,7 +444,11 @@ summary(CHLA_MODEL)
  
  # model of best fit
  
- CHLA_MODEL_Best <- lm(data = ARC.PhysChem.5_major_Lakes.nozeros, log(Chla_ug)~Temp_C + pH + PAR+Secchi_Depth)
+ CHLA_MODEL_Best <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + pH + PAR+Secchi_Depth+Cond_uS)
  
  summary(CHLA_MODEL_Best)
-        
+ 
+ step(CHLA_MODEL_Best)
+ 
+ 
+ 
