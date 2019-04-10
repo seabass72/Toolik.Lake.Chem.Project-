@@ -150,7 +150,7 @@ ARC.PhysChem.5_major_Lakes.processed <- ARC.PhysChem.2010_2014.processed %>%
 
 
 
-CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Depth_m, color = Site)) +
+CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Secchi_Depth, color = Site)) +
   geom_point()+
   theme_Final_Project+
   scale_y_reverse( lim=c(20,0))+
@@ -450,5 +450,89 @@ summary(CHLA_MODEL)
  
  step(CHLA_MODEL_Best)
  
+ ########### statistical test 3 mann-kendall test for Toolik Lake looking for change points (temp, cond, pH, DO, par, and chla)
  
  
+ #Toolik lake mann-kendall test intial for chla 
+ 
+             # filter out samples for single depth (depth == 0)
+             
+             ARC.PhysChem.Toolik_zero.processed<- ARC.PhysChem.Toolik.processed %>%
+               filter(Depth_m == 0)
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug) # show a likely change point at point 33
+             
+             # confirm change point with mann kendall test for [1:32]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[1:32])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[33:63]) # not significant 
+             
+             
+# mann kendall test for temp in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Temp_C)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Temp_C) # show a likely change point at point 31
+             
+             # confirm change point with mann kendall test for [1:30]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Temp_C[1:30])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[31:63]) # not significant 
+             
+             
+# mann kendall test for pH in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$pH) # no significant change point for pH
+             
+# mann kendall test for conductivity in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Cond_uS) # not significant 
+             
+            
+# mann kendall test for dissolved O in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen) # show a likely change point at point 32
+             
+             # confirm change point with mann kendall test for [1:31]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen[1:31])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[31:63]) # not significant
+             
+             
+ # mann kendall test for PAR in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$PAR) # not significant, no further analysis with pettitt test
+             
+            
+             
+             
+             
+             
+            
+             
+            
