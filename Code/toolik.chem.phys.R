@@ -17,6 +17,7 @@ library(ggpubr)
 library(FSA)
 library(corrplot)
 library(trend)
+library(gridExtra)
 
 
 # theme for project 
@@ -150,14 +151,14 @@ ARC.PhysChem.5_major_Lakes.processed <- ARC.PhysChem.2010_2014.processed %>%
 
 
 
-CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Secchi_Depth, color = Site)) +
+CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Depth_m, color = Site)) +
   geom_point()+
   theme_Final_Project+
   scale_y_reverse( lim=c(20,0))+
   scale_colour_manual(values = c('#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'))+
   ylab("Depth (m)")+
   xlab(expression("Chlorophyll a Concentration"~"("*mu*g/L*")"))+
-  ggtitle(" Chlorophyll a Concentrations vs. Depth for Lakes in the Toolik Region, Alaska")+
+  ggtitle(" Chlorophyll a Concentrations vs. Depth for Lakes near the Toolik Field Station")+
   theme(plot.title = element_text(hjust = 0.5))+
   labs(color='Lake Name')
 
@@ -172,7 +173,7 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
    scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
    xlab("Date")+
    ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
-   ggtitle(" Chlorophyll a Concentrations vs. Time for Lakes in the Toolik Region, Alaska")+
+   ggtitle(" Chlorophyll a Concentrations vs. Time for Lakes near the Toolik Field Station")+
    theme(plot.title = element_text(hjust = 0.5))+
    labs(color='Lake Name')+
    scale_x_date(date_breaks = "2 month", date_labels = "%m/%Y")+
@@ -185,7 +186,7 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
  
  
  
- # Water quality Measurements accross the five lakes (use gg arrange to make a graph with 5 plots)
+ # 3 Water quality Measurements accross the five lakes (use gg arrange to make a graph with 5 plots)
  
  
  #  temperature plot
@@ -201,7 +202,7 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                    size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Temperature ")+
+   ggtitle(" Water Temperature ")+
    theme(plot.title = element_text(hjust = 0.5))
    
  LAKE.v.TEMP.PLOT
@@ -277,23 +278,48 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
    theme(plot.title = element_text(hjust = 0.5))
  
  LAKE.v.chla.PLOT
+ 
+ # PAR plot
+ 
+ LAKE.v.PAR.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = PAR, fill =Site ))+
+   geom_boxplot()+
+   theme_Final_Project+
+   xlab("Lake Name")+
+   ylab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   ggtitle(" Photosynthetically Active Radiation ")+
+   theme(plot.title = element_text(hjust = 0.5))
+ 
+ LAKE.v.PAR.PLOT
 
  # using gg arrange to put all the plots together 
  
- WATER_Q_Total_Plot <- ggarrange(LAKE.v.TEMP.PLOT, LAKE.v.COND.PLOT, LAKE.v.DO.PLOT, LAKE.v.pH.PLOT, LAKE.v.chla.PLOT, ncol = 2, nrow = 3)
+ WATER_Q_Total_Plot <- ggarrange(LAKE.v.chla.PLOT,LAKE.v.PAR.PLOT, LAKE.v.TEMP.PLOT, LAKE.v.COND.PLOT, LAKE.v.DO.PLOT, LAKE.v.pH.PLOT,  ncol = 2, nrow = 3)
  WATER_Q_Total_Plot_complete<-annotate_figure(WATER_Q_Total_Plot,
-                 top = text_grob("Distribution of Physical and Chemical Water Quality parameters for Lakes in the Toolik Region", color = "black", face = "bold", size = 14))
+                 top = text_grob("Physical and Chemical Water Quality Parameters for Lakes near the Toolik Field Station ", color = "black", face = "bold", size = 14))
 
+ 
  WATER_Q_Total_Plot_complete
  
+ #tiff("WATER_Quality_plot_total.jpeg", units="in", width=10, height=11, res=400)
+# WATER_Q_Total_Plot_complete
+ #dev.off()
  
- ################## Data Analysis section
+ 
+ 
+ ################## Data Analysis section ########################################################################
  
  # 1 separate water quality parameters for each of the five lakes 
  
   #A Toolik Lake
   ARC.PhysChem.Toolik.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
-    filter(Site =="Toolik")
+    filter(Site =="Toolik" )
+    
   
   #B LAke E5
   
@@ -316,7 +342,7 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
     filter(Site =="I5")
  
  
- #2 Check for Normality in the physical and Chemical parameters(temp, cond, pH, DO, and chla)
+ #2 Check for Normality in the physical and Chemical parameters(temp, cond, pH, DO, chla, and Secchi depth)
  
     #A Toolik Lake Normality shapiro wilks test
   
@@ -383,14 +409,14 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
 ################ 1 Statistical test significant difference betweem 5 lakes for (temp, cond, pH, DO, and chla)
          
          
-         # A. significant difference between lakes for (temp, cond, pH, DO, and chla) using kruskal wallis test
+         # A. significant difference between lakes for (temp, cond, pH, DO, par, and chla) using kruskal wallis test
          
         Kruskal_Temp <-kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ ARC.PhysChem.5_major_Lakes.processed$Site)
         Kruskal_Cond <- kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ ARC.PhysChem.5_major_Lakes.processed$Site)
         Kruskal_pH <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ ARC.PhysChem.5_major_Lakes.processed$Site)
         Kruskal_Chla <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ ARC.PhysChem.5_major_Lakes.processed$Site)
         Kruskal_DO <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen ~ ARC.PhysChem.5_major_Lakes.processed$Site)
-       
+        Kruskal_PAR <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ ARC.PhysChem.5_major_Lakes.processed$Site)
         # B. see which lake are significant different for (temp, cond, pH, DO, and chla) using the dunn test
         
         dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , ARC.PhysChem.5_major_Lakes.processed$Site)
@@ -398,7 +424,8 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
         dunnTest(ARC.PhysChem.5_major_Lakes.processed$pH , ARC.PhysChem.5_major_Lakes.processed$Site)
         dunnTest(ARC.PhysChem.5_major_Lakes.processed$Chla_ug , ARC.PhysChem.5_major_Lakes.processed$Site)
         dunnTest(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen , ARC.PhysChem.5_major_Lakes.processed$Site)
-
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$PAR , ARC.PhysChem.5_major_Lakes.processed$Site)
+        
 ################ 2 Statistical test multiple linear regression to determine what factors are important in Chla concentrations
 
 # 1 remove chla concentrations that are zero for log transformation of dependent variable
@@ -444,11 +471,11 @@ summary(CHLA_MODEL)
  
  # model of best fit
  
- CHLA_MODEL_Best <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + pH + PAR+Secchi_Depth+Cond_uS)
+ CHLA_MODEL_Best <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + pH + PAR+Secchi_Depth)
  
  summary(CHLA_MODEL_Best)
  
- step(CHLA_MODEL_Best)
+ 
  
  ########### statistical test 3 mann-kendall test for Toolik Lake looking for change points (temp, cond, pH, DO, par, and chla)
  
@@ -529,10 +556,244 @@ summary(CHLA_MODEL)
              mk.test(ARC.PhysChem.Toolik_zero.processed$PAR) # not significant, no further analysis with pettitt test
              
             
+
+########## DATA Analysis: final data visualizations 
              
              
+##### 1 plot for mann kendal trend test ( total of 6 graphs that will be grouped togehter)
              
+    # A Chla vs. time plot for toolik lake with change points and trend line for parts with significant trends
+            
+             CHLA_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Chla_ug, color = Chla_ug)) +
+               geom_point()+
+               theme_Final_Project+
+               #scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
+               xlab("Date")+
+               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+               ggtitle(" Chlorophyll a Concentrations vs. Time for Toolik Lake")+
+               theme(plot.title = element_text(hjust = 0.5))+
+               labs(color = expression("Chla Conc."~"("*mu*g/L*")"))+
+               scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+               theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+               scale_color_gradient(low="blue", high="green")+
+               geom_vline(xintercept=as.Date("2012-08-25"), linetype="dashed", col = 'black')+
+               geom_smooth(method=lm,se=TRUE, col = "black")+
+               theme(panel.background = element_rect(fill = "white", 
+                                                     size = 2, linetype = "solid"))+
+               theme(panel.grid.major.y =element_blank())
+             
+             
+             CHLA_Time_Toolik_PLOT
+             
+             # B Water Temperature vs. time plot for toolik lake with change points and trend line for parts with significant trends
+             
+             TEMP_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Temp_C, color = Temp_C)) +
+               geom_point()+
+               theme_Final_Project+
+               #scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
+               xlab("Date")+
+               ylab(expression("Water Temperature"*~degree*C))+
+               ggtitle(" Water Temperature vs. Time for Toolik Lake")+
+               theme(plot.title = element_text(hjust = 0.5))+
+               labs(color=expression("Temp."*~degree*C))+
+               scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+               theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+               scale_color_gradient(low="blue", high="red")+
+               geom_vline(xintercept=as.Date("2012-08-03"), linetype="dashed", col = 'black')+
+               geom_smooth(method=lm,se=TRUE, col = "black", show.legend = TRUE)+
+               theme(panel.background = element_rect(fill = "white", 
+                                                     size = 2, linetype = "solid"))+
+               theme(panel.grid.major.y =element_blank())
+             
+             
+             TEMP_Time_Toolik_PLOT
+             
+             # C Conductivity vs. time plot for toolik lake no significant mann kendall trend analysis (no trend line or change points)
+             
+             COND_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Cond_uS, color = Cond_uS)) +
+               geom_point()+
+               theme_Final_Project+
+               xlab("Date")+
+               ylab("Conductivity (uS/cm)")+
+               ggtitle(" Conductivity vs. Time for Toolik Lake")+
+               theme(plot.title = element_text(hjust = 0.5))+
+               labs(color="Conductivity (uS/cm)")+
+               scale_x_date(date_breaks = "2 month", date_labels = "%m/%Y")+
+               theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+               scale_color_gradient(low="blue", high="red")+
+               theme(panel.background = element_rect(fill = "white", 
+                                                     size = 2, linetype = "solid"))+
+               theme(panel.grid.major.y =element_blank())
+             
+             
+            COND_Time_Toolik_PLOT
+            
+            # D pH vs. time plot for toolik lake no significant mann kendall trend analysis (no trend line or change points)
+            
+            pH_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= pH, color = pH)) +
+              geom_point()+
+              theme_Final_Project+
+              xlab("Date")+
+              ylab("pH")+
+              ggtitle(" pH vs. Time for Toolik Lake")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              labs(color="pH")+
+              scale_x_date(date_breaks = "2 month", date_labels = "%m/%Y")+
+              theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+              scale_color_gradient(low="yellow", high="red")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())
+            
+            
+            pH_Time_Toolik_PLOT
              
             
+            # E PAR vs. time plot for toolik lake no significant mann kendall trend analysis (no trend line or change points)
+            
+            PAR_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= PAR, color = PAR)) +
+              geom_point()+
+              theme_Final_Project+
+              xlab("Date")+
+              ylab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+              ggtitle("Photosynthetically Active Radiation vs. Time for Toolik Lake")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              labs(color="PAR")+
+              scale_x_date(date_breaks = "2 month", date_labels = "%m/%Y")+
+              theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+              scale_color_gradient(low="blue", high="red")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())
+            
+            
+            PAR_Time_Toolik_PLOT
+            
+            
+            # F DO vs. time plot for toolik lake with change points and trend line for parts with significant trends
+            
+            
+            DO_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Dissolved_Oxygen, color = Dissolved_Oxygen)) +
+              geom_point()+
+              theme_Final_Project+
+              xlab("Date")+
+              ylab("Dissolved Oxygen (mg/L)")+
+              ggtitle("Dissolved Oxygen vs. Time for Toolik Lake")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              labs(color='DO (mg/L)')+
+              scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+              theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+              scale_color_gradient(low="red", high="blue")+
+              geom_vline(xintercept=as.Date("2012-08-17"), linetype="dashed", col = 'black')+
+              geom_smooth(method=lm,se=TRUE, col = "black", show.legend = TRUE)+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())
+            
+            DO_Time_Toolik_PLOT
+            
+             
+            # use gg arrange to put all the plots together 
+            
+            Mann_Kendall_Plot <- ggarrange(CHLA_Time_Toolik_PLOT,TEMP_Time_Toolik_PLOT,  DO_Time_Toolik_PLOT,  ncol = 1, nrow = 3)
+            MAnn_Kendall_Plot_complete<-annotate_figure(Mann_Kendall_Plot,
+                                                         top = text_grob(" Mann- Kendall Trend Analysis for Toolik Lake", color = "black", face = "bold", size = 14))
+            
+            
+            MAnn_Kendall_Plot_complete
+            
+            
+# 2 plots of the independent variables that were significant vs. Chla (multiple linear regression plot)
+            
+            #Chla vs. water temp plot
+            
+            MLR_ALL.chla.temp.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= Temp_C, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(expression("Water Temperature"*~(degree*C)))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              ggtitle(" Chlorophyll a Concentrations vs. Water Temperature for All Lakes near the Toolik Field Station")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+            MLR_ALL.chla.temp.plot
+            
+            #Chla vs. pH plot
+            
+            MLR_ALL.pH.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= pH, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(("pH"))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              ggtitle(" Chlorophyll a Concentrations vs. pH for All Lakes near the Toolik Field Station")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+            MLR_ALL.pH.plot
+            
+            #Chla vs. PAR plot
+            
+            MLR_ALL.chla.PAR.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= PAR, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              ggtitle(" Chlorophyll a Concentrations vs. PAR for All Lakes near the Toolik Field Station")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+            MLR_ALL.chla.PAR.plot
+            
+            
+            #Chla vs. PAR plot
+            
+            MLR_ALL.chla.secchi.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= Secchi_Depth, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab("Secchi Depth (m)")+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              ggtitle(" Chlorophyll a Concentrations vs. Secchi Depth for All Lakes near the Toolik Field Station")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")+
+              xlim(0, 12)
+            
+            
+            MLR_ALL.chla.secchi.plot
+            
+            # put all the plots together with ggarrange
+            
+           MLR_PLOT <-ggarrange(MLR_ALL.chla.temp.plot, MLR_ALL.pH.plot,  MLR_ALL.chla.secchi.plot,MLR_ALL.chla.PAR.plot,  ncol = 2, nrow = 2)
+            MLR.plot.complete<-annotate_figure(MLR_PLOT,
+                                                        top = text_grob(" MLR", color = "black", face = "bold", size = 14))
+            
+            
+            MLR.plot.complete
+            
+            
+            
+             
+             
+         
+             
+
              
             
