@@ -492,6 +492,149 @@ Physical and Chemical Water Quality Parameters plot show the distribution of Chl
 \newpage
 
 # Analysis
+
+## Statistical Analysis 1: Significant Differences between Lakes
+
+### Separate Data and Check Assumptions 
+
+First, I separated the five lakes into individal datasets, so that I could check the normality and homogeneity of variances. Normality and homogeneity of variances are key assumptions that need to be met if I want to run an ANOVA. I used a Shapiro-Wilks test to test if the data was normality distributed. However, the data was not normally distributed, which is common with water quality data. Similarly, the data did not meet the assumption of homogeneity of variances. 
+
+
+```{r}
+ # 1 separate water quality parameters for each of the five lakes 
+ 
+  #A Toolik Lake
+  ARC.PhysChem.Toolik.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="Toolik" )
+    
+  
+  #B LAke E5
+  
+  ARC.PhysChem.E5.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="E5")
+  
+  #C Lake FOG 2
+  
+  ARC.PhysChem.FOG_2.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="Fog 2")
+  
+  #D Lake I7
+  
+  ARC.PhysChem.I7.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="I7")
+  
+  #E Lake I5
+  
+  ARC.PhysChem.I5.processed <- ARC.PhysChem.5_major_Lakes.processed %>%
+    filter(Site =="I5")
+ 
+ 
+         
+ #2 Check for Normality in the physical and Chemical parameters(temp, cond, pH, DO, chla, and Secchi depth)
+ 
+    #A Toolik Lake Normality shapiro wilks test
+  
+          shapiro.test(ARC.PhysChem.Toolik.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.Toolik.processed$pH)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.Toolik.processed$PAR)
+          shapiro.test(ARC.PhysChem.Toolik.processed$Secchi_Depth)
+          
+          
+   #B  Lake E5 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.E5.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.E5.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.E5.processed$pH)
+          shapiro.test(ARC.PhysChem.E5.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.E5.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.E5.processed$PAR)
+          shapiro.test(ARC.PhysChem.E5.processed$Secchi_Depth)
+  
+  #C Lake Fog 2 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$pH)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$PAR)
+          shapiro.test(ARC.PhysChem.FOG_2.processed$Secchi_Depth)
+          
+    #D Lake I7 Normality shapiro wilks test
+          
+          shapiro.test(ARC.PhysChem.I7.processed$Temp_C)
+          shapiro.test(ARC.PhysChem.I7.processed$Cond_uS)
+          shapiro.test(ARC.PhysChem.I7.processed$pH)
+          shapiro.test(ARC.PhysChem.I7.processed$Chla_ug)
+          shapiro.test(ARC.PhysChem.I7.processed$Dissolved_Oxygen)
+          shapiro.test(ARC.PhysChem.I7.processed$PAR)
+          shapiro.test(ARC.PhysChem.I7.processed$Secchi_Depth)
+  
+  
+    #E Lake I5 Normality shapiro wilks test
+  
+         shapiro.test(ARC.PhysChem.I5.processed$Temp_C)
+         shapiro.test(ARC.PhysChem.I5.processed$Cond_uS)
+         shapiro.test(ARC.PhysChem.I5.processed$pH)
+         shapiro.test(ARC.PhysChem.I5.processed$Chla_ug)
+         shapiro.test(ARC.PhysChem.I5.processed$Dissolved_Oxygen)
+         shapiro.test(ARC.PhysChem.I5.processed$PAR)
+         shapiro.test(ARC.PhysChem.I5.processed$Secchi_Depth)
+         
+ # 3 check for the homogeneity of variances between the 5 major lakes for water quality parameters
+ 
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+         bartlett.test(ARC.PhysChem.5_major_Lakes.processed$Secchi_Depth ~ ARC.PhysChem.5_major_Lakes.processed$Site)
+```
+
+
+
+### Kruskal-Wallis Test and Dunn Test
+I decided to use a nonparametric test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity because the data did not meet the assumptions. I used a Kruskal Wallis Test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity. Additionally, I used a Dunn Test to do a pairwise comparison of the different lakes to determine which lakes were significantly different for each of the six variables. 
+
+
+```{r}
+    # A. significant difference between lakes for (temp, cond, pH, DO, par, and chla) using kruskal wallis test
+         
+        Kruskal_Temp <-kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Temp
+        
+        Kruskal_Cond <- kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Cond
+        
+        Kruskal_pH <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_pH
+        
+        Kruskal_Chla <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Chla
+        
+        Kruskal_DO <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen  ~
+                                      as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+         Kruskal_DO
+         
+        Kruskal_PAR <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_PAR
+        
+        # B. see which lake are significant different for (temp, cond, pH, DO, and chla) using the dunn test
+        
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Cond_uS , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$pH , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Chla_ug , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$PAR , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        
+```
+
+## Multiple Linear Regression Analysis to determine the significant factors in predicting Chlorophyll a concentrations
 <Include R chunks for 3+ statistical tests (display code and output) and 3+ final visualization graphs (display graphs only).>
 
 <Include text sections to accompany these R chunks to explain the reasoning behind your workflow, rationale for your approach, and the justification of meeting or failing to meet assumptions of tests.>
