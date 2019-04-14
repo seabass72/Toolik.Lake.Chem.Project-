@@ -18,6 +18,7 @@ library(FSA)
 library(corrplot)
 library(trend)
 library(gridExtra)
+library(ggsignif)
 
 
 # theme for project 
@@ -88,6 +89,10 @@ ARC.PhysChem.2010_2014.cleaned$PAR <- as.numeric(as.character(ARC.PhysChem.2010_
 ARC.PhysChem.2010_2014.cleaned$Secchi_Depth <- as.character(ARC.PhysChem.2010_2014.cleaned$Secchi_Depth)
 
 ARC.PhysChem.2010_2014.cleaned$Time_hr <- as.character(ARC.PhysChem.2010_2014.cleaned$Time_hr)
+
+ARC.PhysChem.2010_2014.cleaned$Site <-as.character(ARC.PhysChem.2010_2014.cleaned$Site)
+
+
 
 # 5 make sure that date column is in the date format 
 
@@ -192,9 +197,8 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
  #  temperature plot
  
  LAKE.v.TEMP.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Temp_C, fill =Site ))+
-   geom_boxplot()+
+   geom_box()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab(expression("Temperature"*~degree*C))+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -202,8 +206,8 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                    size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Water Temperature ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
    
  LAKE.v.TEMP.PLOT
  
@@ -211,9 +215,8 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
  
  
  LAKE.v.COND.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Cond_uS, fill =Site ))+
-   geom_boxplot()+
+   geom_violin()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab("Conductivity (uS/cm)")+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -221,16 +224,15 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                          size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Conductivity ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
  
  LAKE.v.COND.PLOT
  
  #pH plot
  LAKE.v.pH.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = pH, fill =Site ))+
-   geom_boxplot()+
+   geom_violin()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab("pH")+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -238,17 +240,16 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                          size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" pH  ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
  
  LAKE.v.pH.PLOT
  
  # dissolved oxygen plot
  
  LAKE.v.DO.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
-   geom_boxplot()+
+   geom_violin()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab("DO (mg/L)")+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -256,17 +257,16 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                          size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Dissolved Oxygen ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
  
  LAKE.v.DO.PLOT
  
  # chla plot
  
  LAKE.v.chla.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Chla_ug, fill =Site ))+
-   geom_boxplot()+
+   geom_violin()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab(expression("Chla Concentration"~"("*mu*g/L*")"))+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -274,17 +274,16 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                          size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Chlorophyll a ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
  
  LAKE.v.chla.PLOT
  
  # PAR plot
  
  LAKE.v.PAR.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = PAR, fill =Site ))+
-   geom_boxplot()+
+   geom_violin()+
    theme_Final_Project+
-   xlab("Lake Name")+
    ylab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
    theme(legend.position = "none")+
    scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
@@ -292,8 +291,9 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
                                          size = 2, linetype = "solid"))+
    theme(panel.grid.major.y =element_blank())+
    theme(text = element_text(size=12))+
-   ggtitle(" Photosynthetically Active Radiation ")+
-   theme(plot.title = element_text(hjust = 0.5))
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+   
  
  LAKE.v.PAR.PLOT
 
@@ -712,7 +712,8 @@ summary(CHLA_MODEL)
               theme_Final_Project+
               xlab(expression("Water Temperature"*~(degree*C)))+
               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
-              ggtitle(" Chlorophyll a Concentrations vs. Water Temperature for All Lakes near the Toolik Field Station")+
+              ggtitle("Water Temperature")+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
               theme(plot.title = element_text(hjust = 0.5))+
               geom_smooth(method=lm,se=TRUE, col = "black")+
               theme(panel.background = element_rect(fill = "white", 
@@ -730,7 +731,8 @@ summary(CHLA_MODEL)
               theme_Final_Project+
               xlab(("pH"))+
               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
-              ggtitle(" Chlorophyll a Concentrations vs. pH for All Lakes near the Toolik Field Station")+
+              ggtitle( "pH")+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
               theme(plot.title = element_text(hjust = 0.5))+
               geom_smooth(method=lm,se=TRUE, col = "black")+
               theme(panel.background = element_rect(fill = "white", 
@@ -748,7 +750,8 @@ summary(CHLA_MODEL)
               theme_Final_Project+
               xlab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
-              ggtitle(" Chlorophyll a Concentrations vs. PAR for All Lakes near the Toolik Field Station")+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
+              ggtitle("PAR")+
               theme(plot.title = element_text(hjust = 0.5))+
               geom_smooth(method=lm,se=TRUE, col = "black")+
               theme(panel.background = element_rect(fill = "white", 
@@ -767,7 +770,8 @@ summary(CHLA_MODEL)
               theme_Final_Project+
               xlab("Secchi Depth (m)")+
               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
-              ggtitle(" Chlorophyll a Concentrations vs. Secchi Depth for All Lakes near the Toolik Field Station")+
+              ggtitle("Secchi Depth")+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
               theme(plot.title = element_text(hjust = 0.5))+
               geom_smooth(method=lm,se=TRUE, col = "black")+
               theme(panel.background = element_rect(fill = "white", 
@@ -783,17 +787,272 @@ summary(CHLA_MODEL)
             
            MLR_PLOT <-ggarrange(MLR_ALL.chla.temp.plot, MLR_ALL.pH.plot,  MLR_ALL.chla.secchi.plot,MLR_ALL.chla.PAR.plot,  ncol = 2, nrow = 2)
             MLR.plot.complete<-annotate_figure(MLR_PLOT,
-                                                        top = text_grob(" MLR", color = "black", face = "bold", size = 14))
+                                                        top = text_grob(" Significant Predictors of Chlorophyll a Concentration in Lakes near the Toolik Field Station ", color = "black", face = "bold", size = 14))
             
             
             MLR.plot.complete
             
             
-            
-             
-             
-         
-             
 
+# 3  box plot of the water quality parameters with the significance levels for the dunn test
+            
+            
+            # A chla dunn box plot
+            
+            Dunn_LAKE.v.chla.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Chla_ug, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab(expression("Chla Concentration"~"("*mu*g/L*")"))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***", size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 27, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 24, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 21, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 19, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 16, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 11.5, size=1, col= "red")+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 9, size=1, col= "red")+
+            geom_signif(comparisons = list(c("I7", "Toolik")), 
+                        map_signif_level=TRUE, annotations = "NS", y_position = 7.7, size=1, col= "red")
+  
+            
+            Dunn_LAKE.v.chla.PLOT
+            
+            # B water temperature dunn box plot
+            
+            Dunn_LAKE.v.temp.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Temp_C, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab(expression("Water Temperature"*~(degree*C)))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0,32)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***", col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 31, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 29.5, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 28, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 26.5, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "        ***", y_position = 25, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 23, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 21.2, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 19.0, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 17.6, col ="red", size=1)
+            
+            
+            Dunn_LAKE.v.temp.PLOT
+            
+            # c pH dunn Box plot 
+            
+            Dunn_LAKE.v.pH.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = pH, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("pH")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(6,15)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 15, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 14.2, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13.5, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 12.6, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 11.8, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 10.9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 10, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 9.2, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 8.5, col ="blue", size=1)
+            
+            
+            Dunn_LAKE.v.pH.PLOT
+            
+            
+            # D conductivity dunn box plot 
+            
+            Dunn_LAKE.v.cond.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Cond_uS, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("Conductivity (uS/cm)")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0,250)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 250, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 40, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 115, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 95, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 230, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 210, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 190, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "**", y_position = 70, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 132, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 150, col ="blue", size=1)
+            
+            
+            Dunn_LAKE.v.cond.PLOT
+            
+            # E Dissolved Oxygen dunn boxplot 
+            
+            Dunn_LAKE.v.DO.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("Dissolved Oxygen (mg/L)")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(7,17)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 17, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 16.1, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 15.5, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 14.9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 14.4, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13.6, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 13.0, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 11, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 12.4, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 11.7, col ="blue", size=1)
+            
+            
+            Dunn_LAKE.v.DO.PLOT
+            
+            
+            # F PAR Dunn Box Plot 
+            
+            Dunn_LAKE.v.PAR.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = PAR, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              xlab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0, 700)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "NS",y_position = 700, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 610, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 540, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 475, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " NS", y_position = 220, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 350, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "**", y_position = 410, col ="blue",size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 280, col ="red",size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 700, col ="red",size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 200, col ="red", size=1)
+            
+            
+            Dunn_LAKE.v.PAR.PLOT
+            
+            
+            # using ggarrange to group the plots together (2 at a time), can't fit all three without compromising 
+            # the comparison bars 
+            
+              # dunn plot (chla, temp)
+              Dunn_Plot_CHLA_TEMP <- ggarrange(Dunn_LAKE.v.chla.PLOT, Dunn_LAKE.v.temp.PLOT,  nrow=1, ncol =2)
+            
+               Dunn_Plot_CHLA_TEMP
+               
+               # dunn plot (PAR, COND)
+               Dunn_Plot_par_cond <- ggarrange(Dunn_LAKE.v.PAR.PLOT, Dunn_LAKE.v.cond.PLOT,  nrow=1, ncol =2)
+               
+               Dunn_Plot_par_cond
+               
+               # dunn plot (DO, pH)
+               Dunn_Plot_pH_DO <- ggarrange(Dunn_LAKE.v.pH.PLOT, Dunn_LAKE.v.DO.PLOT,  nrow=1, ncol =2)
+               
+               Dunn_Plot_pH_DO
+               
+      
+            
+            
              
             
