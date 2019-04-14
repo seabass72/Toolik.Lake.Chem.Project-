@@ -107,7 +107,7 @@ data_ARC<- data.frame(Names, Units,  Data_Structure)
 
 colnames(data_ARC)<- (c("Measurement", "Units",  "Data Structure"))
 
-kable(data_ARC,caption="\\label{tab:table}Artic Lakes Data Summary", booktabs = TRUE)
+kable(data_ARC,caption="\\label{tab:table}Artic Lakes Data Summary")
 ```
 
 
@@ -117,6 +117,187 @@ kable(data_ARC,caption="\\label{tab:table}Artic Lakes Data Summary", booktabs = 
 \newpage
 
 # Exploratory Data Analysis and Wrangling
+
+## Summary Statistics for the Dataset
+
+1. The dimensions of the dataset were 6239 rows and 20 columns. I wanted to understand the dimensions of the dataset so that I could understand how large of dataset was.
+
+
+```{r}
+
+# import the raw dataset 
+
+ARC.PhysChem.2010_14.Raw <- read.csv(
+  "./Data/RAW/ARC_Lakes_Physchem_2010-2014.csv")
+
+
+# 1 dimensions of the dataset
+
+dim(ARC.PhysChem.2010_14.Raw)
+
+```
+
+2. The column names of the dataset are presented below. I wanted to understand the chemical and physical water quality parameters that were present in the dataset with the colnames function.
+
+
+```{r}
+# 2 column names in the proceesed Toolik dataset
+
+colnames(ARC.PhysChem.2010_14.Raw)
+```
+
+
+3. With the str function, I wanted to understand the structure and format of all the of the variables in the dataset.  
+
+
+```{r}
+# 3 determine the structure of the dataset
+
+str(ARC.PhysChem.2010_14.Raw)
+```
+
+
+4. With the head function, I wanted to see how the dataset was organized and what measurements looked like in the dataset.
+
+
+```{r}
+# 4 the first 5 rows of the dataset 
+
+head(ARC.PhysChem.2010_14.Raw)
+
+```
+
+
+5. I used the summary function, to see the distribution of the samples all of the variables in the dataset to get a better understanding of chemical and physical water quality parameters in the arctic region of Alaska. 
+
+
+```{r}
+# 5 look at the summary for each of the columns present in the dataset
+
+summary(ARC.PhysChem.2010_14.Raw)
+```
+
+## Data Wrangling
+
+1. The dataset had columns that I did not need for analysis, so used a pipe function to select the columns that I needed for my analysis.
+
+
+```{r}
+
+# 1 remove unnessary columns 
+
+ARC.PhysChem.selectedcolumns.Raw <- ARC.PhysChem.2010_14.Raw %>%
+  select("Site", "Date", "Rounded.Depth..m.", "Time_hr_dst","Temp_C",
+         "Cond_uS", "pH","DO_mg.l","Chl_ug.l" , "PAR_uEm2s", "Secchi_m" ) 
+  
+```
+
+
+2. The colnames were a bit long and I renamed the columns to make analysis more efficient.
+
+
+```{r}
+# 2 rename the columns with simpler names 
+  
+colnames(ARC.PhysChem.selectedcolumns.Raw) <- c("Site", "Date", "Depth_m", "Time_hr",
+                                                "Temp_C", "Cond_uS", "pH","Dissolved_Oxygen","Chla_ug", "PAR", 
+                                                "Secchi_Depth"  )
+```
+
+
+3. Areas with missing values would impede workflow and hinder my analyis, so missing values had to be removed. Values that were missing were labeled as periods and were hard to remove as periods. I converted the periods into NAs that could be easily removed from the dataset. I used the drop_na function remove the NAs from the dataset.
+
+
+```{r}
+# 3 make periods (missing values into NAs)
+  
+  ARC.PhysChem.selectedcolumns.Raw[ ARC.PhysChem.selectedcolumns.Raw == "." ] <- NA
+  ARC.PhysChem.selectedcolumns.Raw[ ARC.PhysChem.selectedcolumns.Raw == "" ] <- NA
+  
+# remove the nas from the dataset
+  
+ARC.PhysChem.2010_2014.cleaned <- drop_na(ARC.PhysChem.selectedcolumns.Raw)
+```
+
+
+4. Many of the measurements were in the factor format, which were creating issues with many of the statistical models. I converted the measurements that were numeric into the numeric format and the ones that were characters into the character format.
+
+
+```{r}
+# 4 change columns that are numbers that are miss cateloged as
+#factors with as.numeric and as.character
+
+ARC.PhysChem.2010_2014.cleaned$Depth_m <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$Depth_m))
+
+ARC.PhysChem.2010_2014.cleaned$Temp_C <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$Temp_C))
+
+ARC.PhysChem.2010_2014.cleaned$Cond_uS <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$Cond_uS))
+
+ARC.PhysChem.2010_2014.cleaned$pH <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$pH))
+
+ARC.PhysChem.2010_2014.cleaned$Dissolved_Oxygen <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$Dissolved_Oxygen))
+
+ARC.PhysChem.2010_2014.cleaned$Chla_ug <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$Chla_ug))
+
+ARC.PhysChem.2010_2014.cleaned$PAR <- as.numeric(
+  as.character(ARC.PhysChem.2010_2014.cleaned$PAR))
+
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth <- as.character(
+  ARC.PhysChem.2010_2014.cleaned$Secchi_Depth)
+
+ARC.PhysChem.2010_2014.cleaned$Time_hr <- as.character(
+  ARC.PhysChem.2010_2014.cleaned$Time_hr)
+
+ARC.PhysChem.2010_2014.cleaned$Site <-as.character(
+  ARC.PhysChem.2010_2014.cleaned$Site)
+
+
+```
+
+5. The date format was also in the factor format as well. if I wanted to graph or do further analysis, I would need the date in the date format. I used as.Date to convert the date into the date format.
+
+```{r}
+# 5 make sure that date column is in the date format 
+
+ARC.PhysChem.2010_2014.cleaned$Date <- as.Date(
+  ARC.PhysChem.2010_2014.cleaned$Date, "%d-%B-%y")
+
+
+
+```
+
+
+6. The secchi depth had characters (>Xm) inputted in with the measurements where the secchi disk hit bottom before the secchi depth was recorded. To fix this issue, I changed the values to "-1" and converted the format of the secchi depth to numeric. I saved the processed dataset in the Processed data folder.
+
+
+```{r}
+# 6 make secchi depths where hit bottom a number instead of a character (-1)
+
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth[
+  ARC.PhysChem.2010_2014.cleaned$Secchi_Depth == ">Xm"] <- -1
+
+ARC.PhysChem.2010_2014.cleaned$Secchi_Depth <- as.numeric(
+  ARC.PhysChem.2010_2014.cleaned$Secchi_Depth)
+
+#  Save the processed dataset
+
+write.csv(ARC.PhysChem.2010_2014.cleaned,
+          file = "./Data/Processed/ARC.PhysChem.2010_2014.Processed.csv",row.names = FALSE)
+
+```
+
+
+
+
+
+
+
 
 <Include R chunks for 5+ lines of summary code (display code and output), 3+ exploratory graphs (display graphs only), and any wrangling you do to your dataset(s).> 
 
