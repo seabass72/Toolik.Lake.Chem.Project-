@@ -1,4 +1,7 @@
 ---
+header-includes: #allows you to add in your own Latex packages
+- \usepackage{float} #use the 'float' package
+- \floatplacement{figure}{H} #make every figure with caption = h
 output: 
   pdf_document:
     keep_tex: yes
@@ -86,7 +89,7 @@ The first objective of the study was to understand if there were significant dif
 
 <Information on how the dataset for this analysis were collected, the data contained in the dataset, and any important pieces of information that are relevant to your analyses. This section should contain much of same information as the README file for the dataset but formatted in a way that is more narrative.>
 
-The dataset included the physical and chemical water quality measurements for various lakes that were located near the Toolik Lake Research Station in Alaska for the years: 2010-2014 (Table \ref{tab:table}). The data was collected as part of the Long Term Ecological Research (LTER) for the National Science Foundation (NSF). The water quality parameters that I used for my study were chlorophyll a concentration, dissolved oxygen concentration, pH, water temperature, photosynthetically active radiation, depth of measurement, secchi depth, and conductivity. The site descriptors for the dataset included site name, time, date, and depth. For the first objective of my analysis, I focused on five lakes that had the most observations: Toolik, E5, I7, I5, and Fog 2 Lake.
+The dataset included the physical and chemical water quality measurements for various lakes that were located near the Toolik Lake Research Station in Alaska for the years: 2010-2014 (Table \ref{tab:table}). The data was collected as part of the Long Term Ecological Research (LTER) for the National Science Foundation (NSF). The water quality parameters that I used for my study were chlorophyll a concentration, dissolved oxygen concentration, pH, water temperature, photosynthetically active radiation, depth of measurement, secchi depth, and conductivity. The site descriptors for the dataset included site name, time, date, and depth. For the first objective of my analysis, I focused on five lakes that had the most observations: Toolik, E5, I7, I5, and Fog 2 Lake. Lake E5 also has undergone nutrient enrichment and the other four lakes are classified as reference lakes. 
 
 To collect water quality data, A hydrolab Surveyor 4 data logger and Datsonde DS5 multiprobe were used to measure: depth (m), pH, specific conductivity (uS/cm), dissolved oxygen (mg/L), water temperature (Celsius), in-vivo fluorescence(chlorophyll a concentration), and photosynthetic active radiation (PAR) at half meter to meter intervals depending on the depth of the lake. To determine the secchi depth, A secchi disk (22 cm black and white disk) was used. There was only one depth for each site that was taken on a particular day for secchi depth. The data was only collected from June to August due to the lakes usually being frozen over for most of the year. 
 
@@ -294,8 +297,190 @@ write.csv(ARC.PhysChem.2010_2014.cleaned,
 
 
 
+## Data Exploration 
+
+### Chlorophyll a Concentration vs. Depth Plot for the 5 Major Lakes near the Toolik Field Station
 
 
+```{r fig1, echo=FALSE, fig.cap ="\\label{fig:fig1}The plot above shows the chlorophyll a concentrations(ug/L) vs. Depth (m) for five of the major lakes in the region.", fig.width=10, fig.height=6, fig.pos='H' }
+
+# working with the cleaned dataset
+
+ARC.PhysChem.2010_2014.processed<- ARC.PhysChem.2010_2014.cleaned
+
+# 1 Plot to see Chlorophyll A concentration vs. Depth 
+
+#filter for lakes with the most observations (top 5)
+
+ARC.PhysChem.5_major_Lakes.processed <- ARC.PhysChem.2010_2014.processed %>%
+  filter(Site == "Toolik"| Site == "E5" | Site == "Fog 2"|  Site == "I7"|  Site == "I5")
+
+
+
+CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug, y= Depth_m, color = Site)) +
+  geom_point()+
+  theme_Final_Project+
+  scale_y_reverse( lim=c(20,0))+
+  scale_colour_manual(values = c('#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'))+
+  ylab("Depth (m)")+
+  xlab(expression("Chlorophyll a Concentration"~"("*mu*g/L*")"))+
+  ggtitle(" Chlorophyll a Concentrations vs. Depth for Lakes near the Toolik Field Station")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  labs(color='Lake Name')
+
+ CHLA_DEPTH_PLOT
+```
+
+
+The Chlorophyll a Concentration vs. Depth Plot diplays that chlorophyll a concentrations appear to be the highest upper water column(figure \ref{fig:fig1}). Additionally, it appears that Lake E5 has the highest concentration of chlorophyll a. Chlorophyll a appear to be present throughout the water column, even at deeper depths. Finally, it appears that Toolik and I7 Lake are the deepest lakes out of the five.
+
+### Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Toolik Field Station
+
+The Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Toolik Field Station appears to be showing an increasing trend from 2010 to 2014 (figure \ref{fig:fig2}). The Chlorophyll a concentrations seem to be highest in the early summer and decrease in the later summer months. Temperature and sunlight could be a likely cause of the decrease in the latter part of summer due to the fact that the lakes are located at higher latitudes. 
+
+```{r fig2, echo=FALSE, fig.cap ="\\label{fig:fig2}The plot above shows the chlorophyll a concentrations(ug/L) vs. Time for five of the major lakes in the region.", fig.width=10, fig.height=6, fig.pos='H' }
+
+ # 2 plot to see how chlorophyll a changes over Time (2010-2014)
+ 
+ CHLA_Time_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Date, y= Chla_ug, color = Site)) +
+   geom_point()+
+   theme_Final_Project+
+   scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
+   xlab("Date")+
+   ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+   ggtitle(" Chlorophyll a Concentrations vs. Time for Lakes near the Toolik Field Station")+
+   theme(plot.title = element_text(hjust = 0.5))+
+   labs(color='Lake Name')+
+   scale_x_date(date_breaks = "2 month", date_labels = "%m/%Y")+
+   theme(axis.text.x = element_text(angle = 45,  hjust = 1))
+ 
+ CHLA_Time_PLOT
+ 
+ 
+```
+
+
+### Physical and Chemical Water Quality Parameters Plot for Lakes near the Toolik Field Station
+
+Physical and Chemical Water Quality Parameters plot show the distribution of Chlorophyll a, dissolved oxygen, pH, conductivity, water temperature, and photosynthetically active radiation (PAR) for the lakes: Toolik, E5, I7, I5, and Fog 2 (figure \ref{fig:fig3}). Lake E5 has the highest chlorophyll a concentration out of the five lakes whereas the other lakes have similar chlorophyll a distributions. There is a pretty even distribution of PAR across the five lakes, which makes sense because they are in the same general geographic location. Lake Fog 2 has the coldest water temperatures compared to the other lakes and the highest conductivity as well. Lake Fog 2 also has the highest dissolved oxygen concentration, which could be attributed to the colder water temperatures.The five lakes have differing pHs and Lake E5 has the lowest pH out of the lakes. 
+
+```{r fig3, echo=FALSE, fig.cap ="\\label{fig:fig3}Physical and Chemical Water Quality Parameters for Lakes near the Toolik Field Station", fig.width=10, fig.height=8, fig.pos='H' }
+ # 3 Water quality Measurements accross the five lakes (use gg arrange to make a graph with 5 plots)
+ 
+ 
+ #  temperature plot
+ 
+ LAKE.v.TEMP.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Temp_C, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab(expression("Temperature"*~degree*C))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                   size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+   
+ 
+ 
+ # conductivity plot 
+ 
+ 
+ LAKE.v.COND.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Cond_uS, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab("Conductivity (uS/cm)")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+ 
+ 
+ 
+ #pH plot
+ LAKE.v.pH.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = pH, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab("pH")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+ 
+ 
+ 
+ # dissolved oxygen plot
+ 
+ LAKE.v.DO.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab("DO (mg/L)")+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+ 
+ 
+ 
+ # chla plot
+ 
+ LAKE.v.chla.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Chla_ug, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab(expression("Chla Concentration"~"("*mu*g/L*")"))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+ 
+ 
+ 
+ # PAR plot
+ 
+ LAKE.v.PAR.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = PAR, fill =Site ))+
+   geom_violin()+
+   theme_Final_Project+
+   ylab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+   theme(legend.position = "none")+
+   scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+   theme(panel.background = element_rect(fill = "white", 
+                                         size = 2, linetype = "solid"))+
+   theme(panel.grid.major.y =element_blank())+
+   theme(text = element_text(size=12))+
+   theme(plot.title = element_text(hjust = 0.5))+
+   theme(axis.title.x = element_blank())
+   
+ 
+ 
+
+ # using gg arrange to put all the plots together 
+ 
+ WATER_Q_Total_Plot <- ggarrange(LAKE.v.chla.PLOT,LAKE.v.PAR.PLOT, LAKE.v.TEMP.PLOT, LAKE.v.COND.PLOT, LAKE.v.DO.PLOT, LAKE.v.pH.PLOT,  ncol = 2, nrow = 3)
+ WATER_Q_Total_Plot_complete<-annotate_figure(WATER_Q_Total_Plot,
+                 top = text_grob("Physical and Chemical Water Quality Parameters for Lakes near the Toolik Field Station ", color = "black", face = "bold", size = 14))
+
+ 
+ WATER_Q_Total_Plot_complete
+ 
+```
 
 
 
