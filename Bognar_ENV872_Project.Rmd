@@ -52,6 +52,7 @@ library(gridExtra)
 library(ggsignif)
 library(knitr)
 library(bookdown)
+library(car)
 
 # Set your ggplot theme
 
@@ -604,37 +605,139 @@ I decided to use a nonparametric test to determine if there were significant dif
 ```{r}
     # A. significant difference between lakes for (temp, cond, pH, DO, par, and chla) using kruskal wallis test
          
-        Kruskal_Temp <-kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Temp <-kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Temp_C ~ 
+                                      as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_Temp
         
-        Kruskal_Cond <- kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Cond <- kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Cond_uS ~ 
+                                       as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_Cond
         
-        Kruskal_pH <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_pH <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$pH ~ 
+                                      as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_pH
         
-        Kruskal_Chla <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_Chla <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Chla_ug ~ 
+                                        as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_Chla
         
         Kruskal_DO <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen  ~
                                       as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
          Kruskal_DO
          
-        Kruskal_PAR <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        Kruskal_PAR <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ 
+                                       as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_PAR
         
         # B. see which lake are significant different for (temp, cond, pH, DO, and chla) using the dunn test
         
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Cond_uS , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$pH , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Chla_ug , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
-        dunnTest(ARC.PhysChem.5_major_Lakes.processed$PAR , as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Cond_uS , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$pH , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Chla_ug , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$Dissolved_Oxygen , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
+        dunnTest(ARC.PhysChem.5_major_Lakes.processed$PAR , as.factor(
+          ARC.PhysChem.5_major_Lakes.processed$Site))
         
 ```
 
-## Multiple Linear Regression Analysis to determine the significant factors in predicting Chlorophyll a concentrations
+## 2 Multiple Linear Regression Analysis to determine the significant factors in predicting Chlorophyll a concentrations
+
+### Assumptions that have to be met for a Multiple Linear Regression  
+
+The four assumptions that have to be met are for a Multiple Linear Regression:
+
+1. linear relationship between the variables 
+2. normal distribution
+3. equal variance
+4. No Multicollinearity
+
+
+### Checking the Normality of the log Transformed Chlorophyll a Concentration and the Multicollinearity of the Data
+
+Due to the lack of normality, I log transformed the chlorophyll a concentration (dependent variable). I also removed the zeros from the dataset because the log of zero is undefined and would not allow the multiple linear regression to work. I used a shapiro wilks test and looked at the qq plot to determine if the chlorophyll a concentration was normally distributed. The shapiro wilks test showed that the distribution was still not normally distributed (Shapiro Wilks, p =0.002). However before the log transformation, the distribution was heavily skewed (Shapiro Wilks, p< 2.2e-16). The qq plot showed that the log transformed distribution relatively follows a normal distribution, so I assumed that it was a normal distribution. I then looked at the Variance Inflation Factors (VIF) of all the variables and none of them had a VIF greater than 10. This indicates that the data has met the assumption of no multicollinearity. 
+
+```{r }
+# 1 remove chla concentrations that are zero for log transformation of dependent variable
+        ARC.PhysChem.all_Lakes.nozeros<- ARC.PhysChem.2010_2014.processed %>%
+        filter(Chla_ug > 0 )
+        
+        
+# 2 check normality of the of dependent variable (chlorophyll a) with log transformation
+        
+        # use the shapiro wilks test to test normality
+        
+        shapiro.test(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug)) # much improved (p value = 10^-16 -> 0.00214)
+        
+        # look at the improvement in qqplot 
+        
+        qqnorm(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug))
+        qqline(log(ARC.PhysChem.all_Lakes.nozeros$Chla_ug))
+        
+# Multicollinearity using the VIF from the car package
+        
+  vif(lm(log(Chla_ug)~Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth, data=ARC.PhysChem.all_Lakes.nozeros))
+```
+
+### Run Basic Multiple Linear Regression and Look at Diagnostic plots to see if other Assumptions were Met
+
+I ran a multiple linear regression for the full model: log(Chla_ug) = Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth. I then looked at the diagnostic plots to see if the assumptions for the multiple linear regression were met. The Residuals vs. Fitted plot, which determines if the variables flow alinear relationship, showed a relatively horizontal line through zero. This indicates that the data does in fact have a linear relationship. The Scale to Location Plot (looks at the assumption of equal variance) showed that the points were relatively randomly distributed and line was almost horizontal, which indicated that the data fulfills the assumption of homogeneity of variances. Finally, the Residuals to Leverage plot shows that none of the outliers are outside the cook's distance, which indicates that none of the outliers have 
+
+
+
+
+
+```{r}
+# run multiple linear regression (full model)
+        
+CHLA_MODEL <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth)
+
+summary(CHLA_MODEL)
+
+
+# check Diagnostic Plots for Linear Regression Analysis
+
+par(mfrow = c(3, 2))
+
+ plot(CHLA_MODEL)
+ 
+
+```
+
+### Find the Multiple Linear Regression Model of Best Fit
+
+
+With all the assumptions for the multiple linear regression met, I used a step-AIC to determine the model of best fit. The equation of best fit was: 
+
+log(Chla concentration) = 4.409 - 0.0474*(Water Temp.) - 0.331*(pH) - 0.0010*(PAR) - 0.133*(Secchi Depth)
+
+
+
+
+```{r}
+
+# use Step-AIC to find the model of best fit
+ 
+ step(CHLA_MODEL)
+ 
+ # model of best fit
+ 
+ CHLA_MODEL_Best <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + pH + PAR+Secchi_Depth)
+ 
+ summary(CHLA_MODEL_Best)
+ 
+```
+
+
+### Mann Kendall Test to determine the Presence of Montonic Trends 
+
+
+
 <Include R chunks for 3+ statistical tests (display code and output) and 3+ final visualization graphs (display graphs only).>
 
 <Include text sections to accompany these R chunks to explain the reasoning behind your workflow, rationale for your approach, and the justification of meeting or failing to meet assumptions of tests.>
