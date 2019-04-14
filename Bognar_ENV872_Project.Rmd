@@ -1,0 +1,140 @@
+---
+output: 
+  pdf_document:
+    keep_tex: yes
+    fig_caption: yes
+    number_sections: yes
+geometry: margin=2.54cm
+title: Experiment Title
+subtitle: "https://github.com/seabass72/Toolik.Lake.Chem.Project-"
+author: "Sebastian Bognar"
+abstract: "Experimental overview. This section should be no longer than 250 words."
+fontsize: 12pt
+mainfont: Times New Roman
+---
+
+<Information in these brackets are used for annotating the RMarkdown file. They will not appear in the final version of the PDF document>
+
+\newpage
+\tableofcontents 
+\newpage
+\listoftables 
+\newpage
+\listoffigures 
+\newpage
+
+<Setup the global options for the R chunks in your document>
+
+<Note: set up autoreferencing for figures and tables in your document>
+
+```{r setup, include=FALSE}
+# Set your working directory
+setwd("/Users/Seabass/Documents/Duke/spring_2019/env_872L/lesson_2/Toolik.Lake.Chem.Project")
+
+# Load your packages
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+library(nlme)
+library(lsmeans)
+library(multcompView)
+library(naniar)
+library(chron)
+library(reshape2)
+library(ggpubr)
+library(FSA)
+library(corrplot)
+library(trend)
+library(gridExtra)
+library(ggsignif)
+library(knitr)
+library(bookdown)
+
+# Set your ggplot theme
+
+theme_Final_Project <- theme_classic(base_size = 12) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "right", 
+        axis.ticks = element_line(colour = "black"),
+        panel.border = element_rect(fill= NA,color="black", size=0.5, 
+                                    linetype="solid"),
+        panel.grid.major.y =element_line(color = "grey"),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x  = element_blank(),
+        panel.grid.minor.x  = element_blank(),
+        axis.text.x = element_text(angle = 0,  hjust = 1),
+        panel.background = element_rect(fill = "#bdbdbd", 
+                                          size = 2, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "white") )
+
+
+```
+
+
+# Research Question and Rationale
+
+<Paragraph detailing the rationale for your analysis. What is the significant application and/or interest in this topic? Connect to environmental topic(s)/challenge(s).>
+
+<Paragraph detailing your research question(s) and goals. What do you want to find out? Include a sentence (or a few) on the dataset you are using to answer this question - just enough to give your reader an idea of where you are going with the analysis.>
+
+The first objective of the study was to understand if there were significant differences in the physical and chemical water quality characteristics between the five major lakes near the Toolik Field Station (E5, Fog 2, I7, I5, & Toolik Lakes). The next objective was to determine if there were any water quality parameters that were significant predictors of chlorophyll a concentrations in all the lakes in the study area (74 lakes). Finally, I wanted to see if there were any monotonic trends present within the distribution of chlorophyll a, dissolved oxygen, pH, water temperature, PAR, and conductivity for Toolik Lake. To answer these questions, I looked at chemical and physical water quality data for lakes near the Toolik Field Station. The dataset was collected during the summers from 2010-2014 and measured water quality data at a total of 74 lakes.
+
+\newpage
+
+# Dataset Information
+
+<Information on how the dataset for this analysis were collected, the data contained in the dataset, and any important pieces of information that are relevant to your analyses. This section should contain much of same information as the README file for the dataset but formatted in a way that is more narrative.>
+
+The dataset included the physical and chemical water quality measurements for various lakes that were located near the Toolik Lake Research Station in Alaska for the years: 2010-2014 (Table \ref{tab:table}). The data was collected as part of the Long Term Ecological Research (LTER) for the National Science Foundation (NSF). The water quality parameters that I used for my study were chlorophyll a concentration, dissolved oxygen concentration, pH, water temperature, photosynthetically active radiation, depth of measurement, secchi depth, and conductivity. The site descriptors for the dataset included site name, time, date, and depth. For the first objective of my analysis, I focused on five lakes that had the most observations: Toolik, E5, I7, I5, and Fog 2 Lake.
+
+To collect water quality data, A hydrolab Surveyor 4 data logger and Datsonde DS5 multiprobe were used to measure: depth (m), pH, specific conductivity (uS/cm), dissolved oxygen (mg/L), water temperature (Celsius), in-vivo fluorescence(chlorophyll a concentration), and photosynthetic active radiation (PAR) at half meter to meter intervals depending on the depth of the lake. To determine the secchi depth, A secchi disk (22 cm black and white disk) was used. There was only one depth for each site that was taken on a particular day for secchi depth. The data was only collected from June to August due to the lakes usually being frozen over for most of the year. 
+
+
+
+```{r table,  echo = FALSE}
+
+
+
+
+Names <-c("Site", "Date", "Depth_m", "Time_hr", "Temp_C", "Cond_uS", "pH", "Dissolved_Oxygen", "Chla_ug", "PAR", "Secchi_Depth")
+
+Units <- c("Name", "YYYY-MM-DD","Meters","HH:MM", "Celsius", "uS/cm", "-log[H+]", "mg/L","ug/L","uE/m2/sec","Meters" )
+
+Data_Structure <- c("Character", "Date", "Numeric","Character","Numeric","Numeric","Numeric","Numeric","Numeric","Numeric","Numeric")
+
+data_ARC<- data.frame(Names, Units,  Data_Structure)
+
+colnames(data_ARC)<- (c("Measurement", "Units",  "Data Structure"))
+
+kable(data_ARC,caption="\\label{tab:table}Artic Lakes Data Summary", booktabs = TRUE)
+```
+
+
+
+<Add a table that summarizes your data structure. This table can be made in markdown text or inserted as a `kable` function in an R chunk. If the latter, do not include the code used to generate your table.>
+
+\newpage
+
+# Exploratory Data Analysis and Wrangling
+
+<Include R chunks for 5+ lines of summary code (display code and output), 3+ exploratory graphs (display graphs only), and any wrangling you do to your dataset(s).> 
+
+<Include text sections to accompany these R chunks to explain the reasoning behind your workflow, and the rationale for your approach.>
+
+
+\newpage
+
+# Analysis
+<Include R chunks for 3+ statistical tests (display code and output) and 3+ final visualization graphs (display graphs only).>
+
+<Include text sections to accompany these R chunks to explain the reasoning behind your workflow, rationale for your approach, and the justification of meeting or failing to meet assumptions of tests.>
+
+
+\newpage
+
+# Summary and Conclusions
+<Summarize your major findings from your analyses. What conclusions do you draw from your findings? Make sure to apply this to a broader application for the research question you have answered.>
+
+
+
