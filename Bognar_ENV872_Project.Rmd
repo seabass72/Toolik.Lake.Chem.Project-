@@ -598,8 +598,32 @@ First, I separated the five lakes into individal datasets, so that I could check
 
 
 
-### Kruskal-Wallis Test and Dunn Test
-I decided to use a nonparametric test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity because the data did not meet the assumptions. I used a Kruskal Wallis Test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity. Additionally, I used a Dunn Test to do a pairwise comparison of the different lakes to determine which lakes were significantly different for each of the six variables. 
+### Kruskal-Wallis Test 
+I decided to use a nonparametric test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity because the data did not meet the assumptions. I used a Kruskal Wallis Test to determine if there were significant differences between the 5 lakes for dissolved oxygen, PAR, Secchi depth, chlorophyll a concentrations, water temperature, and conductivity.
+
+There was a significant difference between the five major lakes for water temperature, conductivity, pH, dissolved oxygen, and chlorophyll a concentration (Kruskal Wallis: Table \ref{tab:table2}). There was also a significant difference between the five major lakes for PAR (Kruskal Wallis: Table \ref{tab:table2}). However, the significant difference was on a lower order of magnitude (Kruskal Wallis: Table \ref{tab:table2}). 
+
+```{r table2,  echo = FALSE}
+
+
+
+
+Constituent <-c( "Water Temperature", "Conductivity", "pH", "Dissolved Oxygen", "Chla Concentration", "PAR")
+
+Chi <- c(120.93,1132.3,718.98,218.06,298.56,21.332)
+
+P <- c("2.2e-16","2.2e-16","2.2e-16","2.2e-16","2.2e-16",0.00027)
+
+df<- c(4,4,4,4,4,4)
+data_wallis<- data.frame(Constituent, Chi, P, df)
+
+colnames(data_wallis)<- (c("Constituent", "Chi-Squared",  "P-Value", "DF"))
+
+kable(data_wallis,caption="\\label{tab:table2}Kruskal Wallis Test Results ")
+```
+
+
+
 
 
 ```{r}
@@ -628,7 +652,286 @@ I decided to use a nonparametric test to determine if there were significant dif
         Kruskal_PAR <-  kruskal.test(ARC.PhysChem.5_major_Lakes.processed$PAR ~ 
                                        as.factor(ARC.PhysChem.5_major_Lakes.processed$Site))
         Kruskal_PAR
-        
+```
+   
+   
+
+### Dunn Test
+
+
+Additionally, I used a Dunn Test to do a pairwise comparison of the different lakes to determine which lakes were significantly different for each of the six variables. For pH, All of the five major lakes were significant differnet from one another, except for the comparison of Lake E5 to Lake I5 (Dunn Test; p < 0.0001, Figure \ref{fig:fig4}). Similarly, all the lakes' distribution of conductivity were significantly different from one another (Dunn Test; p < 0.0001, Figure \ref{fig:fig4}). The distribution of photosynthetically active radiation for all the lakes were not significantly different except for the comparison between lake Fog2 and Toolik Lake, which was significant (Dunn Test; p < 0.0001, Figure \ref{fig:fig4}). Most of chlorophyll a distributions were significantly different between the lakes (Dunn Test; p < 0.0001, Figure \ref{fig:fig4}), but the comparisons between I5 & I7, I5 & Toolik, and I7 & Toolik were not significant. For the  dissolved oxygen, a majority of the lakes had significantly different distributions, but the comparisons between: E5 & I5, E5 & I7, I5 & I7, and Fog 2 & Toolik did not have significantly different distributions. Finally, the majority of the lakes had significantly different distributions of water temperature (Dunn Test; p < 0.0001, Figure \ref{fig:fig4}), but the comparisons between E5 & I5, E5 & I7, I5 & I7, and I7 & Toolik were not significantly different. 
+
+
+
+```{r fig4, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig4}The plot above shows the significant and non-significant differences between the five major lakes for chlorophyll a concentrations, PAR, dissolved oxygen, conductivity, water temperature, and pH. The signifance level is represented by: * (p < 0.01), ** (p < 0.001), *** ( p < 0.0001),NS = not significant. The blue lines also show that there is a significant difference between the lakes and red lines show a non- significant relationhip.", fig.width=11, fig.height=13, fig.pos='H'}
+# 3  box plot of the water quality parameters with the significance levels for the dunn test
+            
+            
+            # A chla dunn box plot
+            
+            Dunn_LAKE.v.chla.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Chla_ug, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab(expression("Chla Concentration"~"("*mu*g/L*")"))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***", size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 27, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 24, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 21, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 19, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 16, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13, size=1, col= "blue")+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 11.5, size=1, col= "red")+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 9, size=1, col= "red")+
+            geom_signif(comparisons = list(c("I7", "Toolik")), 
+                        map_signif_level=TRUE, annotations = "NS", y_position = 7.7, size=1, col= "red")
+  
+            
+           
+            
+            # B water temperature dunn box plot
+            
+            Dunn_LAKE.v.temp.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Temp_C, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab(expression("Water Temperature"*~(degree*C)))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0,32)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***", col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 31, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 29.5, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 28, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 26.5, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "        ***", y_position = 25, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 23, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 21.2, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 19.0, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 17.6, col ="red", size=1)
+            
+            
+           
+            
+            # c pH dunn Box plot 
+            
+            Dunn_LAKE.v.pH.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = pH, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("pH")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(6,15)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 15, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 14.2, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13.5, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 12.6, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 11.8, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 10.9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 10, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 9.2, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 8.5, col ="blue", size=1)
+            
+            
+            
+            
+            
+            # D conductivity dunn box plot 
+            
+            Dunn_LAKE.v.cond.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Cond_uS, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("Conductivity (uS/cm)")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0,250)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 250, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 40, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 115, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 95, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 230, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 210, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 190, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "**", y_position = 70, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 132, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 150, col ="blue", size=1)
+            
+            
+           
+            
+            # E Dissolved Oxygen dunn boxplot 
+            
+            Dunn_LAKE.v.DO.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = Dissolved_Oxygen, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              ylab("Dissolved Oxygen (mg/L)")+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(7,17)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "***",y_position = 17, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 16.1, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 15.5, col ="red", size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 14.9, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " ***", y_position = 14.4, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 13.6, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 13.0, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 11, col ="red", size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 12.4, col ="blue", size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "***", y_position = 11.7, col ="blue", size=1)
+            
+            
+            
+            
+            
+            # F PAR Dunn Box Plot 
+            
+            Dunn_LAKE.v.PAR.PLOT <- ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Site, y = PAR, fill =Site ))+
+              geom_boxplot(outlier.size=-1)+
+              theme_Final_Project+
+              xlab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+              theme(legend.position = "none")+
+              scale_fill_manual(values = c('#b2182b','#ef8a62','#fddbc7','#e0e0e0','#999999'))+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              theme(text = element_text(size=12))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              theme(axis.title.x = element_blank())+
+              ylim(0, 700)+
+              geom_signif(comparisons = list(c("E5", "Fog 2")), 
+                          map_signif_level=TRUE, annotations = "NS",y_position = 700, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "I5")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 610, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 540, col ="red",size=1)+
+              geom_signif(comparisons = list(c("E5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 475, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I5")), 
+                          map_signif_level=TRUE, annotations = " NS", y_position = 220, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 350, col ="red",size=1)+
+              geom_signif(comparisons = list(c("Fog 2", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "**", y_position = 410, col ="blue",size=1)+
+              geom_signif(comparisons = list(c("I5", "I7")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 280, col ="red",size=1)+
+              geom_signif(comparisons = list(c("I5", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 700, col ="red",size=1)+
+              geom_signif(comparisons = list(c("I7", "Toolik")), 
+                          map_signif_level=TRUE, annotations = "NS", y_position = 200, col ="red", size=1)
+            
+            
+            
+            
+            # using ggarrange to group the plots together (2 at a time), can't fit all three without compromising 
+            # the comparison bars 
+            
+            par(mfrow = c(3, 2))
+            
+              # dunn plot (chla, temp)
+              Dunn_Plot_CHLA_TEMP <- ggarrange(Dunn_LAKE.v.chla.PLOT, Dunn_LAKE.v.temp.PLOT,  nrow=1, ncol =2)
+            
+              
+               # dunn plot (PAR, COND)
+               Dunn_Plot_par_cond <- ggarrange(Dunn_LAKE.v.PAR.PLOT, Dunn_LAKE.v.cond.PLOT,  nrow=1, ncol =2)
+               
+             
+               
+               # dunn plot (DO, pH)
+               Dunn_Plot <- ggarrange(Dunn_LAKE.v.pH.PLOT, Dunn_LAKE.v.DO.PLOT, Dunn_LAKE.v.PAR.PLOT,
+                              Dunn_LAKE.v.cond.PLOT, Dunn_LAKE.v.chla.PLOT, Dunn_LAKE.v.temp.PLOT , nrow=3, ncol =2)
+                              
+              dunn_plot_complete<- annotate_figure(Dunn_Plot,top = text_grob(
+              "Significant Differences Between the Five Major Lakes for Physical and Chemical Water Quality Parameters",                size = 15))
+               
+               dunn_plot_complete
+               
+      
+```
+  
+   
+   
+   
+``` {r}     
         # B. see which lake are significant different for (temp, cond, pH, DO, and chla) using the dunn test
         
         dunnTest(ARC.PhysChem.5_major_Lakes.processed$Temp_C , as.factor(
@@ -686,13 +989,13 @@ Due to the lack of normality, I log transformed the chlorophyll a concentration 
 
 ### Run Basic Multiple Linear Regression and Look at Diagnostic plots to see if other Assumptions were Met
 
-I ran a multiple linear regression for the full model: log(Chla_ug) = Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth. I then looked at the diagnostic plots to see if the assumptions for the multiple linear regression were met. The Residuals vs. Fitted plot, which determines if the variables flow alinear relationship, showed a relatively horizontal line through zero. This indicates that the data does in fact have a linear relationship. The Scale to Location Plot (looks at the assumption of equal variance) showed that the points were relatively randomly distributed and line was almost horizontal, which indicated that the data fulfills the assumption of homogeneity of variances. Finally, the Residuals to Leverage plot shows that none of the outliers are outside the cook's distance, which indicates that none of the outliers have 
+I ran a multiple linear regression for the full model: log(Chla_ug) = Temp_C + Cond_uS + pH + Dissolved_Oxygen + PAR +Secchi_Depth. I then looked at the diagnostic plots to see if the assumptions for the multiple linear regression were met. The Residuals vs. Fitted plot, which determines if the variables flow alinear relationship, showed a relatively horizontal line through zero (Figure \ref{fig:fig5}). This indicates that the data does in fact have a linear relationship. The Scale to Location Plot (looks at the assumption of equal variance) showed that the points were relatively randomly distributed and line was almost horizontal, which indicated that the data fulfills the assumption of homogeneity of variances (Figure \ref{fig:fig5}). Finally, the Residuals to Leverage plot shows that none of the outliers are outside the cook's distance, which indicates that none of the outliers have significant pull on the outcome of the model (Figure \ref{fig:fig5}). 
 
 
 
 
 
-```{r}
+```{r fig5, fig.cap ="\\label{fig:fig5}The plot above shows the four diagnostic plots: qq plot, Residuals vs. Fitted Plot, Scale to Location Plot, and Residuals to Leverage Plot. "}
 # run multiple linear regression (full model)
         
 CHLA_MODEL <- lm(data = ARC.PhysChem.all_Lakes.nozeros, log(Chla_ug)~Temp_C + Cond_uS + pH + Dissolved_Oxygen+PAR+Secchi_Depth)
@@ -714,7 +1017,35 @@ par(mfrow = c(3, 2))
 
 With all the assumptions for the multiple linear regression met, I used a step-AIC to determine the model of best fit. The equation of best fit was: 
 
-log(Chla concentration) = 4.409 - 0.0474*(Water Temp.) - 0.331*(pH) - 0.0010*(PAR) - 0.133*(Secchi Depth)
+log(Chla concentration) = 4.409 - 0.0474*(Water Temp.) - 0.331 *(pH) - 0.0010* (PAR) - 0.133 *(Secchi Depth)
+
+or 
+
+Back-transformed : 
+
+Chla concentration = 82.19 - 1.05*(Water Temp.) - 1.39*(pH) - 1.00*(PAR) - 1.14*(Secchi Depth)
+
+
+Water temperature, pH, PAR, and Secchi depth were significant predictors of chlorophyll a concentrations in lakes near the Toolik Field Station (MLR; Table \ref{tab:table3} ). The multiple linear regression model explained 39.11 % of the variation in the chlorophyll a concentration (MLR; p < 0.0001; R^2 = 0.391; df = 3249). With a 1 degree increase in water temperature, there would be a 1.05 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:figure6}). With a 1 unit increase in pH, there would be a 1.39 mg/L decrease in chlorophyll a concentrations (Figure \ref{fig:figure6}). Additionally, a 1 einstein increase in PAR would lead to a 1 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:figure6}). Finally, a 1 meter increase in secchi depth would lead to a 1.14 mg/L decrease in chlorophyll a cocnetration (Figure \ref{fig:figure6}).
+
+```{r table3,  echo = FALSE}
+
+
+
+
+Constituent <-c( "Intercept","Water Temperature", "pH", "PAR", "Secchi Depth")
+
+T <- c(27.00,-14.16,-13.06,-20.96,-19.61)
+
+P <- c("2.0e-16","2.0e-16","2.0e-16","2.0e-16","2.0e-16")
+
+data_MLR<- data.frame(Constituent, T, P)
+
+colnames(data_MLR)<- (c("Model Variable", "T-Value",  "P-Value"))
+
+kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficients")
+```
+
 
 
 
@@ -735,6 +1066,96 @@ log(Chla concentration) = 4.409 - 0.0474*(Water Temp.) - 0.331*(pH) - 0.0010*(PA
 
 
 ### Mann Kendall Test to determine the Presence of Montonic Trends 
+
+Due to the fact that the other lakes did not have enough observations when looking at depth = zero, I only looked at data from Toolik Lake for the trend analysis. I looked for monotonic trends within the entirety of the time series for water temperature, conductivity, pH, dissolved oxygen, PAR, and chlorophyll a concentrations using the mann-kendall test. Additionally, I used the Pettitt test determine the change points within the datasets. 
+
+Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 958, p < 0.001). The change point was located at 8/25/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). There were no significant monotonic trends present for pH, PAR, and conductivity at Toolik Lake from June 2010 - August 2014. Water tempature at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = -432, p = 0.01). The change point was located at 8/17/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). Finally, dissolved oxygen concentration at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 423, p = 0.012). The change point was located at 8/03/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p = 0.0043 ).
+
+
+
+```{r}
+########### statistical test 3 mann-kendall test for Toolik Lake looking for change points (temp, cond, pH, DO, par, and chla)
+ 
+ 
+ #Toolik lake mann-kendall test intial for chla 
+ 
+             # filter out samples for single depth (depth == 0)
+             
+             ARC.PhysChem.Toolik_zero.processed<- ARC.PhysChem.Toolik.processed %>%
+               filter(Depth_m == 0)
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug) # show a likely change point at point 33
+             
+             # confirm change point with mann kendall test for [1:32]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[1:32])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[33:63]) # not significant 
+             
+             
+# mann kendall test for temp in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Temp_C)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Temp_C) # show a likely change point at point 31
+             
+             # confirm change point with mann kendall test for [1:30]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Temp_C[1:30])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[31:63]) # not significant 
+             
+             
+# mann kendall test for pH in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$pH) # no significant change point for pH
+             
+# mann kendall test for conductivity in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Cond_uS) # not significant 
+             
+            
+# mann kendall test for dissolved O in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen)
+             
+             # use the pettitt test determine the change points in the seasons 
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen) # show a likely change point at point 32
+             
+             # confirm change point with mann kendall test for [1:31]
+             
+             mk.test(ARC.PhysChem.Toolik_zero.processed$Dissolved_Oxygen[1:31])
+             
+             # use pettitt test on latter half of data to find next change point
+             
+             pettitt.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug[31:63]) # not significant
+             
+             
+ # mann kendall test for PAR in toolik lake
+             
+             # Initial Mann Kendall Test
+             mk.test(ARC.PhysChem.Toolik_zero.processed$PAR) # not significant, no further analysis with pettitt test
+             
+            
+
+```
+
 
 
 
