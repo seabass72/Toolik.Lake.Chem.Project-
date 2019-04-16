@@ -42,7 +42,7 @@ DO_Sat: the percen saturation of dissolved oxygen at depth
 DO_umoles.L: The concentration of dissolved oxygen at depth (umoles/L)
 Chl_V: In Vivo measurement of chlorophyll-a concentration (volts)
 *Chl_ug.l: In Vivo measurement of chlorophyll-a concentration (ug/L)
-*PAR_uEm2s: Photosynthetically active radition measured below the water surface (uE/m2/sec)
+*PAR_uEm2s: Photosynthetically active radiation measured below the water surface (uE/m2/sec)
 refPAR_uEm2s: Photosynthetically active radition measured with deck unit to correct for changes in ambient light (uE/m2/sec)
 Hydrolab: indicates what measurements were used to for measurements
 *Secchi_m: Measure of water transparency by depth (m)
