@@ -8,7 +8,7 @@ output:
     fig_caption: yes
     number_sections: yes
 geometry: margin=2.54cm
-title: Experiment Title
+title: 
 subtitle: "https://github.com/seabass72/Toolik.Lake.Chem.Project-"
 author: "Sebastian Bognar"
 abstract: "Experimental overview. This section should be no longer than 250 words."
