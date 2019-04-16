@@ -11,7 +11,7 @@ geometry: margin=2.54cm
 title: The Effects of Physical and Chemical Water Quality Parameters in Lakes Located in the Artic Region of Alaska
 subtitle: "https://github.com/seabass72/Toolik.Lake.Chem.Project-"
 author: "Sebastian Bognar"
-abstract: "The arctic region of Alaska is a interesting and complex ecosystem. The dataset that was used for the analysis sampled 74 lakes for various physical and chemical water quality parameters during the summers from 2010-2014 near the Toolik Field Station. The objectives of the study was to determine if the five major lakes were significantly different, find any monotonic trends that existed during the study period, and determine which chemical and physical parameters had a significant effect on chlorophyll a concentrations. I used kruskal-wallis tests, dunn tests, a multiple linear regression, and mann-kendall tests to perform my statistical Analysis. I found that most of the five major lakes were significantly different from one another in regards to Water Temperature, Conductivity, pH, Dissolved Oxygen, Chla Concentration, and PAR. Using a multiple linear regression, I found that pH, water temperature, secchi depth, and PAR were significant factors in predicting chlorophyll a concentrations (MLR; p < 0.0001; R^2 = 0.391). Finally, there were positive trends for chlorophyll a concentration and dissolved oxygen and a negative trend for water temperature from June, 2010 - August, 2012. The location and geomorphology of the lakes are likely contributors to the differences that arise between the lakes. The predictors of chlorophyll a concentrations need additional research to understand the complex dynamics of chlorophyll a concentrations. The trends experienced could be to attributed increases in air temperature and temporal weather patterns.   "
+abstract: "The arctic region of Alaska is a interesting and complex ecosystem. The dataset that was used for the analysis sampled 74 lakes for various physical and chemical water quality parameters during the summers from 2010-2014 near the Toolik Field Station. The objectives of the study were to determine if the five major lakes were significantly different, find any monotonic trends that existed during the study period, and determine which chemical and physical parameters had a significant effect on chlorophyll a concentration. I used kruskal-wallis tests, dunn tests, a multiple linear regression, and mann-kendall tests to perform my statistical analysis. I found that most of the five major lakes were significantly different from one another in regards to Water Temperature, Conductivity, pH, Dissolved Oxygen, Chla Concentration, and PAR. Using a multiple linear regression, I found that pH, water temperature, secchi depth, and PAR were significant factors in predicting chlorophyll a concentrations (MLR; p < 0.0001; R^2 = 0.391). Finally, there were positive trends for chlorophyll a concentration and dissolved oxygen and a negative trend for water temperature from June, 2010 - August, 2012 at Toolik Lake. The location and geomorphology of the lakes are likely contributors to the differences that arise between the lakes. The predictors of chlorophyll a concentrations need additional research to understand the complex dynamics of chlorophyll a concentrations. The trends experienced could be to attributed increases in air temperature and temporal weather patterns."
 fontsize: 12pt
 mainfont: Times New Roman
 ---
@@ -26,9 +26,7 @@ mainfont: Times New Roman
 \listoffigures 
 \newpage
 
-<Setup the global options for the R chunks in your document>
 
-<Note: set up autoreferencing for figures and tables in your document>
 
 ```{r setup, include=FALSE}
 # Set your working directory
@@ -80,7 +78,7 @@ theme_Final_Project <- theme_classic(base_size = 12) +
 
 <Paragraph detailing the rationale for your analysis. What is the significant application and/or interest in this topic? Connect to environmental topic(s)/challenge(s).>
 
-The arctic region of Alaska is a diverse and an ecologically important landscape. There has been a substantial amount of research done at the lakes located near the Toolik Field station in the past. However, there has not been much research looking at the the lakes in the recent past (2010-2019). My interest is to look at how these systems are reacting to current climate conditions. I want to understand if the lakes are different and what factors would be helpful to predict chlorophyll a concentrations. Additionally, I want to understand if there are trends that have occurred during the study period (2010-2014). Understanding the factors that are important in predicting chlorophyll a concentrations in these lakes could help understand the chlorophyll dynamics in lakes that are located in the arctic belt around the world. Finally, understanding the trends between 2010-2014 could help us understand if climate change is impacting and altering the dynamics of these systems. 
+The arctic region of Alaska is a diverse and an ecologically important landscape. There has been a substantial amount of research done at the lakes located near the Toolik Field station in the past. However, there has not been much research looking at the the lakes in the recent past (2010-2019). My interest is to look at how these systems are reacting to current climate conditions. I want to understand if the lakes are different and what factors would be helpful to predict chlorophyll a concentrations in the arctic lakes. Additionally, I want to understand if there are trends that have occurred during the study period (2010-2014). Understanding the factors that are important in predicting chlorophyll a concentrations in these lakes could help understand the chlorophyll a dynamics in lakes that are located in the arctic belt around the world. Finally, understanding the trends between 2010-2014 could help us understand if climate change is impacting and altering the dynamics of these systems. 
 
 <Paragraph detailing your research question(s) and goals. What do you want to find out? Include a sentence (or a few) on the dataset you are using to answer this question - just enough to give your reader an idea of where you are going with the analysis.>
 
@@ -92,7 +90,7 @@ The first objective of the study was to understand if there were significant dif
 
 <Information on how the dataset for this analysis were collected, the data contained in the dataset, and any important pieces of information that are relevant to your analyses. This section should contain much of same information as the README file for the dataset but formatted in a way that is more narrative.>
 
-The dataset included the physical and chemical water quality measurements for various lakes that were located near the Toolik Lake Research Station in Alaska for the years: 2010-2014 (Table \ref{tab:table}). The data was collected as part of the Long Term Ecological Research (LTER) for the National Science Foundation (NSF). The water quality parameters that I used for my study were chlorophyll a concentration, dissolved oxygen concentration, pH, water temperature, photosynthetically active radiation, depth of measurement, secchi depth, and conductivity. The site descriptors for the dataset included site name, time, date, and depth. For the first objective of my analysis, I focused on five lakes that had the most observations: Toolik, E5, I7, I5, and Fog 2 Lake. Lake E5 also has undergone nutrient enrichment and the other four lakes are classified as reference lakes. 
+The dataset included the physical and chemical water quality measurements for various lakes that were located near the Toolik Lake Research Station in Alaska for the years: 2010-2014 (Table \ref{tab:table}). The data was collected as part of the Long Term Ecological Research (LTER) for the National Science Foundation (NSF). The water quality parameters that I used for my study were chlorophyll a concentration, dissolved oxygen concentration, pH, water temperature, photosynthetically active radiation, depth of measurement, secchi depth, and conductivity. The site descriptors for the dataset included site name, time, date, and depth. For the first objective of my analysis, I focused on five lakes that had the most observations: Toolik, E5, I7, I5, and Fog 2 Lake. Lake E5 also had undergone nutrient enrichment and the other four lakes are classified as reference lakes. 
 
 To collect water quality data, A hydrolab Surveyor 4 data logger and Datsonde DS5 multiprobe were used to measure: depth (m), pH, specific conductivity (uS/cm), dissolved oxygen (mg/L), water temperature (Celsius), in-vivo fluorescence(chlorophyll a concentration), and photosynthetic active radiation (PAR) at half meter to meter intervals depending on the depth of the lake. To determine the secchi depth, A secchi disk (22 cm black and white disk) was used. There was only one depth for each site that was taken on a particular day for secchi depth. The data was only collected from June to August due to the lakes usually being frozen over for most of the year. 
 
@@ -126,7 +124,7 @@ kable(data_ARC,caption="\\label{tab:table}Artic Lakes Data Summary")
 
 ## Summary Statistics for the Dataset
 
-1. The dimensions of the dataset were 6239 rows and 20 columns. I wanted to understand the dimensions of the dataset so that I could understand how large of dataset was.
+1. The dimensions of the dataset were 6239 rows and 20 columns. I wanted to understand the dimensions of the dataset, so that I could understand how large of dataset was.
 
 
 ```{r}
@@ -331,6 +329,10 @@ CHLA_DEPTH_PLOT <-  ggplot(ARC.PhysChem.5_major_Lakes.processed, aes(x= Chla_ug,
   theme(plot.title = element_text(hjust = 0.5))+
   labs(color='Lake Name')
 
+tiff("./Output/figure1.tiff", units="in", width=9, height=7, res=400)
+print(CHLA_DEPTH_PLOT)
+dev.off()
+
  CHLA_DEPTH_PLOT
 ```
 
@@ -339,7 +341,7 @@ The Chlorophyll a Concentration vs. Depth Plot diplays that chlorophyll a concen
 
 ### Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Toolik Field Station
 
-The Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Toolik Field Station appears to be showing an increasing trend from 2010 to 2014 (figure \ref{fig:fig2}). The Chlorophyll a concentrations seem to be highest in the early summer and decrease in the later summer months. Temperature and sunlight could be a likely cause of the decrease in the latter part of summer due to the fact that the lakes are located at higher latitudes. 
+The Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Toolik Field Station appears to be showing an increasing trend from 2010 to 2014 (figure \ref{fig:fig2}). The Chlorophyll a concentrations seemed to be highest in the early summer and decrease in the later summer months. Temperature and sunlight could be a likely cause of the decrease in the latter part of summer due to the fact that the lakes are located at higher latitudes. 
 
 ```{r fig2, echo=FALSE, fig.cap ="\\label{fig:fig2}The plot above shows the chlorophyll a concentrations(ug/L) vs. Time for five of the major lakes in the region.", fig.width=10, fig.height=6, fig.pos='H' }
 
@@ -358,6 +360,7 @@ The Chlorophyll a Concentration vs. Time Plot for the 5 Major Lakes near the Too
    theme(axis.text.x = element_text(angle = 45,  hjust = 1))
  
  CHLA_Time_PLOT
+ 
  
  
 ```
@@ -483,6 +486,8 @@ Physical and Chemical Water Quality Parameters plot show the distribution of Chl
  
  WATER_Q_Total_Plot_complete
  
+ 
+ 
 ```
 
 
@@ -500,7 +505,7 @@ Physical and Chemical Water Quality Parameters plot show the distribution of Chl
 
 ### Separate Data and Check Assumptions 
 
-First, I separated the five lakes into individal datasets, so that I could check the normality and homogeneity of variances. Normality and homogeneity of variances are key assumptions that need to be met if I want to run an ANOVA. I used a Shapiro-Wilks test to test if the data was normality distributed. However, the data was not normally distributed, which is common with water quality data. Similarly, the data did not meet the assumption of homogeneity of variances. 
+First, I separated the five lakes into individal datasets, so that I could check the normality and homogeneity of variances. Normality and homogeneity of variances are key assumptions that need to be met if I wanted to run an ANOVA. I used a Shapiro-Wilks test to test if the data was normality distributed. However, the data was not normally distributed, which is common with water quality data. Similarly, the data did not meet the assumption of homogeneity of variances. 
 
 
 ```{r}
@@ -665,7 +670,7 @@ Additionally, I used a Dunn Test to do a pairwise comparison of the different la
 
 
 
-```{r fig4, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig4}The plot above shows the significant and non-significant differences between the five major lakes for chlorophyll a concentrations, PAR, dissolved oxygen, conductivity, water temperature, and pH. The signifance level is represented by: * (p < 0.01), ** (p < 0.001), *** ( p < 0.0001),NS = not significant. The blue lines also show that there is a significant difference between the lakes and red lines show a non- significant relationhip.", fig.width=11, fig.height=13, fig.pos='H'}
+```{r fig4, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig4}The plot above shows the significant and nonsignificant differences between the five major lakes for chlorophyll a concentrations, PAR, dissolved oxygen, conductivity, water temperature, and pH. The signifance level is represented by: * (p < 0.01), ** (p < 0.001), *** ( p < 0.0001),NS = not significant. The blue lines also show that there is a significant difference between the lakes and red lines show a nonsignificant relationhip.", fig.width=11, fig.height=13, fig.pos='H'}
 # 3  box plot of the water quality parameters with the significance levels for the dunn test
             
             
@@ -927,6 +932,7 @@ Additionally, I used a Dunn Test to do a pairwise comparison of the different la
                
                dunn_plot_complete
                
+               
       
 ```
   
@@ -951,7 +957,7 @@ Additionally, I used a Dunn Test to do a pairwise comparison of the different la
         
 ```
 
-## 2 Multiple Linear Regression Analysis to determine the significant factors in predicting Chlorophyll a concentrations
+## Statistical Analysis 2: Multiple Linear Regression Analysis to determine the significant factors in predicting Chlorophyll a concentrations
 
 ### Assumptions that have to be met for a Multiple Linear Regression  
 
@@ -965,7 +971,7 @@ The four assumptions that have to be met are for a Multiple Linear Regression:
 
 ### Checking the Normality of the log Transformed Chlorophyll a Concentration and the Multicollinearity of the Data
 
-Due to the lack of normality, I log transformed the chlorophyll a concentration (dependent variable). I also removed the zeros from the dataset because the log of zero is undefined and would not allow the multiple linear regression to work. I used a shapiro wilks test and looked at the qq plot to determine if the chlorophyll a concentration was normally distributed. The shapiro wilks test showed that the distribution was still not normally distributed (Shapiro Wilks, p =0.002). However before the log transformation, the distribution was heavily skewed (Shapiro Wilks, p< 2.2e-16). The qq plot showed that the log transformed distribution relatively follows a normal distribution, so I assumed that it was a normal distribution. I then looked at the Variance Inflation Factors (VIF) of all the variables and none of them had a VIF greater than 10. This indicates that the data has met the assumption of no multicollinearity. 
+Due to the lack of normality, I log transformed the chlorophyll a concentration (dependent variable). I also removed the zeros from the dataset because the log of zero is undefined and would not allow the multiple linear regression to work. I used a shapiro wilks test and looked at the qq plot to determine if the chlorophyll a concentration was normally distributed. The shapiro wilks test showed that the distribution was still not normally distributed (Shapiro Wilks, p =0.002). However before the log transformation, the distribution was heavily skewed (Shapiro Wilks, p< 2.2e-16). The qq plot showed that the log transformed distribution relatively follows a normal distribution, so I assumed that it was a normal distribution. I then looked at the Variance Inflation Factors (VIF) of all the variables and none of them had a VIF greater than 10. This indicates that the data had met the assumption of no multicollinearity. 
 
 ```{r }
 # 1 remove chla concentrations that are zero for log transformation of dependent variable
@@ -991,7 +997,7 @@ Due to the lack of normality, I log transformed the chlorophyll a concentration 
 
 ### Run Basic Multiple Linear Regression and Look at Diagnostic plots to see if other Assumptions were Met
 
-I ran a multiple linear regression for the full model: log(Chla_ug) = Temp_C + Cond_uS + pH + Dissolved_Oxygen + PAR +Secchi_Depth. I then looked at the diagnostic plots to see if the assumptions for the multiple linear regression were met. The Residuals vs. Fitted plot, which determines if the variables flow alinear relationship, showed a relatively horizontal line through zero (Figure \ref{fig:fig5}). This indicates that the data does in fact have a linear relationship. The Scale to Location Plot (looks at the assumption of equal variance) showed that the points were relatively randomly distributed and line was almost horizontal, which indicated that the data fulfills the assumption of homogeneity of variances (Figure \ref{fig:fig5}). Finally, the Residuals to Leverage plot shows that none of the outliers are outside the cook's distance, which indicates that none of the outliers have significant pull on the outcome of the model (Figure \ref{fig:fig5}). 
+I ran a multiple linear regression for the full model: log(Chla_ug) = Temp_C + Cond_uS + pH + Dissolved_Oxygen + PAR +Secchi_Depth. I then looked at the diagnostic plots to see if the assumptions for the multiple linear regression were met. The Residuals vs. Fitted plot, which determines if the variables flow a linear relationship, showed a relatively horizontal line through zero (Figure \ref{fig:fig5}). This indicates that the data did in fact have a linear relationship. The Scale to Location Plot (looks at the assumption of equal variance) showed that the points were relatively randomly distributed and line was almost horizontal, which indicated that the data fulfills the assumption of homogeneity of variances (Figure \ref{fig:fig5}). Finally, the Residuals to Leverage plot shows that none of the outliers are outside the cook's distance, which indicates that none of the outliers have significant pull on the outcome of the model (Figure \ref{fig:fig5}). 
 
 
 
@@ -1049,7 +1055,7 @@ kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficien
 ```
 
 
-```{r fig6, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig6}The plot above shows the significant predictors of Chlorophyll a concentration in Lakes near the Toolik Field Station. The significant predictors of chlorophyll a concentrations are water temperature, PAR, pH, and secchi depth", fig.width=11, fig.height=10, fig.pos='H'}
+```{r fig6, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig6}The plot above shows the significant predictors of Chlorophyll a concentration in Lakes near the Toolik Field Station. The significant predictors of chlorophyll a concentrations are water temperature, PAR, pH, and secchi depth.", fig.width=11, fig.height=10, fig.pos='H'}
 # 2 plots of the independent variables that were significant vs. Chla (multiple linear regression plot)
             
             #Chla vs. water temp plot
@@ -1135,6 +1141,7 @@ kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficien
             
             MLR.plot.complete
             
+
             
 ```
 
@@ -1155,13 +1162,13 @@ kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficien
 ```
 
 
-### Mann Kendall Test to determine the Presence of Montonic Trends 
+## Statistical Analysis 3: Mann Kendall Test to determine the Presence of Montonic Trends 
 
 Due to the fact that the other lakes did not have enough observations when looking at depth = zero, I only looked at data from Toolik Lake for the trend analysis. I looked for monotonic trends within the entirety of the time series for water temperature, conductivity, pH, dissolved oxygen, PAR, and chlorophyll a concentrations using the mann-kendall test. Additionally, I used the Pettitt test determine the change points within the datasets. 
 
 Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 958, p < 0.001; Figure \ref{fig:fig7}). The change point was located at 8/25/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). There were no significant monotonic trends present for pH, PAR, and conductivity at Toolik Lake from June 2010 - August 2014. Water tempature at Toolik Lake from June 2010 - August 2012 showed a significant negative trend (Mann-Kendall;s = -432, p = 0.01; Figure \ref{fig:fig7}). The change point was located at 8/17/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). Finally, dissolved oxygen concentration at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 423, p = 0.012; Figure \ref{fig:fig7}). The change point was located at 8/03/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p = 0.0043 ).
 
-```{r fig7, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig7}The plot above shows the constituents: chlorophyll a concentration, water temperature, & dissolved oxygen that experience significant monotonic trends during the time frame of June, 2010 - August 2014. The dash lines represent the change points of the monotonic trend for each constituent and the solid lines represent the direction of the trend. There were no significant trends that occurred after August, 2012. ", fig.width=11, fig.height=10, fig.pos='H'}
+```{r fig7, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig7}The plot above shows the constituents: chlorophyll a concentration, water temperature, & dissolved oxygen that experience significant monotonic trends during the time frame of June, 2010 - August 2014 for Toolik Lake. The dash lines represent the change points of the monotonic trend for each constituent and the solid lines represent the direction of the trend. There were no significant trends that occurred after August, 2012. ", fig.width=11, fig.height=10, fig.pos='H'}
              
 ##### 1 plot for mann kendal trend test ( total of 6 graphs that will be grouped togehter)
 
@@ -1245,6 +1252,8 @@ Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed 
             
             
             MAnn_Kendall_Plot_complete
+            
+          
 ```
 
 
@@ -1347,7 +1356,7 @@ Most of the five lakes (Toolik, E5, I7, I5, and Fog 2) were significantly differ
 Additionally, I determined that water temperature, pH, secchi depth, and photosynthetically active radiation are significantly predictors for chlorophyll a concentrations in Lakes near the Toolik Field station (Figure \ref{fig:fig5}). As the water temperature, pH, secchi depth, and photosynthetically active radiation increased, there was a decrease in chlorophyll a concentrations. Nutrient concentration measurements within in the lakes are also key to create a more complete model due to the fact that arctic lakes such as Toolik Lake are nutrient limited (O'Brien et al., 1997). The increase in PAR intensity decreasing chlorophyll a concentrations is plausible because higher intensities of PAR can lead to increases in other chlorophyll pigments (Donahue et al., 2003). There is also a strong correlation between chlorophyll a concentration and secchi depth (Hessen 2006). Secchi depth increases when water is clearer and an increase chlorophyll a concentration decreases water clarity. The increase in temperature and pH decreasing chlorophyll a concentrations is not what I would have expected. Other arctic lakes had the highest chlorophyll concentrations when the pH and temperature were the highest in the late summer (French & Petticrew 2007). The decrease in nutrients that occurs near the end of summer could be the reason for the decreases in chl a concentrations and misrepresentation of the relationship of pH and water temperature with chlorophyll a concentrations(O'Brien et al., 1997).  
 
 
-There was positive increasing trends for chlorophyll a concentration and dissolved oxygen between June, 2010 to August, 2012. The increase in chlorophyll a concentration could be due to the increase in annual temperatures and increased mixing within the arctic lakes (Michelutti et al., 2005). The increase in dissolved oxygen could probably be attributed to the increase in chlorophyll a concentrations because photosynthesis produces oxygen. There was also a decreasing trend of water temperature from June, 2010 to August, 2012. This could be due to later ice off periods or changes in wind patterns. Air temperature and additional climatic information is needed to determine the cause of the colder water water temperatures from 2010-2012. 
+There was positive increasing trends for chlorophyll a concentration and dissolved oxygen between June, 2010 to August, 2012 (Figure \ref{fig:fig7}) . The increase in chlorophyll a concentration could be due to the increase in annual temperatures and increased mixing within the arctic lakes (Michelutti et al., 2005). The increase in dissolved oxygen could probably be attributed to the increase in chlorophyll a concentrations because photosynthesis produces oxygen. There was also a decreasing trend of water temperature from June, 2010 to August, 2012. This could be due to later ice off periods or changes in wind patterns. Air temperature and additional climatic information is needed to determine the cause of the colder water water temperatures from 2010-2012. 
 
 
 The lakes near the Toolik Field station are significantly different and have several monotonic trends over the course of the study period. However, longer sampling periods are necessary to gain a better understanding of the physical and chemical water quality parameters at the lakes. Nutrient concentration sampling is key to understand the chlorophyll a  fluctuations because the lakes are most likely nutrient-limited. To understand the significant predictors of chlorophyll a concentrations in the arctic, there has to be nutrient water quality sampling and an increase in sampling frequency among the lakes.  
