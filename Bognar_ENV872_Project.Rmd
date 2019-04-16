@@ -1,7 +1,7 @@
 ---
-header-includes: #allows you to add in your own Latex packages
-- \usepackage{float} #use the 'float' package
-- \floatplacement{figure}{H} #make every figure with caption = h
+header-includes: 
+- \usepackage{float} 
+- \floatplacement{figure}{H} 
 output: 
   pdf_document:
     keep_tex: yes
@@ -1026,7 +1026,7 @@ Back-transformed :
 Chla concentration = 82.19 - 1.05*(Water Temp.) - 1.39*(pH) - 1.00*(PAR) - 1.14*(Secchi Depth)
 
 
-Water temperature, pH, PAR, and Secchi depth were significant predictors of chlorophyll a concentrations in lakes near the Toolik Field Station (MLR; Table \ref{tab:table3} ). The multiple linear regression model explained 39.11 % of the variation in the chlorophyll a concentration (MLR; p < 0.0001; R^2 = 0.391; df = 3249). With a 1 degree increase in water temperature, there would be a 1.05 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:figure6}). With a 1 unit increase in pH, there would be a 1.39 mg/L decrease in chlorophyll a concentrations (Figure \ref{fig:figure6}). Additionally, a 1 einstein increase in PAR would lead to a 1 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:figure6}). Finally, a 1 meter increase in secchi depth would lead to a 1.14 mg/L decrease in chlorophyll a cocnetration (Figure \ref{fig:figure6}).
+Water temperature, pH, PAR, and Secchi depth were significant predictors of chlorophyll a concentrations in lakes near the Toolik Field Station (MLR; Table \ref{tab:table3} ). The multiple linear regression model explained 39.11 % of the variation in the chlorophyll a concentration (MLR; p < 0.0001; R^2 = 0.391; df = 3249). With a 1 degree increase in water temperature, there would be a 1.05 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:fig6}). With a 1 unit increase in pH, there would be a 1.39 mg/L decrease in chlorophyll a concentrations (Figure \ref{fig:fig6}). Additionally, a 1 einstein increase in PAR would lead to a 1 mg/L decrease in chlorophyll a concentration (Figure \ref{fig:fig6}). Finally, a 1 meter increase in secchi depth would lead to a 1.14 mg/L decrease in chlorophyll a cocnetration (Figure \ref{fig:fig6}).
 
 ```{r table3,  echo = FALSE}
 
@@ -1047,6 +1047,94 @@ kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficien
 ```
 
 
+```{r fig6, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig6}The plot above shows the significant predictors of Chlorophyll a concentration in Lakes near the Toolik Field Station. The significant predictors of chlorophyll a concentrations are water temperature, PAR, pH, and secchi depth", fig.width=11, fig.height=10, fig.pos='H'}
+# 2 plots of the independent variables that were significant vs. Chla (multiple linear regression plot)
+            
+            #Chla vs. water temp plot
+            
+            MLR_ALL.chla.temp.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= Temp_C, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(expression("Water Temperature"*~(degree*C)))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+           
+            
+            #Chla vs. pH plot
+            
+            MLR_ALL.pH.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= pH, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(("pH"))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+            
+            
+            #Chla vs. PAR plot
+            
+            MLR_ALL.chla.PAR.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= PAR, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab(expression("PAR"~"("*mu*E/m^2/sec*")"))+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")
+            
+            
+            
+            
+            
+            #Chla vs. PAR plot
+            
+            MLR_ALL.chla.secchi.plot <-  ggplot(ARC.PhysChem.all_Lakes.nozeros, aes(x= Secchi_Depth, y= Chla_ug, col =Chla_ug)) +
+              geom_point(alpha=0.5)+
+              theme_Final_Project+
+              xlab("Secchi Depth (m)")+
+              ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+              labs(color = expression("Chla"~"("*mu*g/L*")"))+
+              theme(plot.title = element_text(hjust = 0.5))+
+              geom_smooth(method=lm,se=TRUE, col = "black")+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())+
+              scale_color_gradient(low="blue", high="green")+
+              xlim(0, 12)
+            
+            
+          
+            
+            # put all the plots together with ggarrange
+            
+           MLR_PLOT <-ggarrange(MLR_ALL.chla.temp.plot, MLR_ALL.pH.plot,  MLR_ALL.chla.secchi.plot,MLR_ALL.chla.PAR.plot,  ncol = 2, nrow = 2)
+            MLR.plot.complete<-annotate_figure(MLR_PLOT,
+                                                        top = text_grob(" Significant Predictors of Chlorophyll a Concentration in Lakes near the Toolik Field Station ", color = "black", face = "bold", size = 14, hjust = 0.5))
+            
+            
+            MLR.plot.complete
+            
+            
+```
 
 
 
@@ -1069,7 +1157,94 @@ kable(data_MLR,caption="\\label{tab:table3}Multiple Linear Regression Coefficien
 
 Due to the fact that the other lakes did not have enough observations when looking at depth = zero, I only looked at data from Toolik Lake for the trend analysis. I looked for monotonic trends within the entirety of the time series for water temperature, conductivity, pH, dissolved oxygen, PAR, and chlorophyll a concentrations using the mann-kendall test. Additionally, I used the Pettitt test determine the change points within the datasets. 
 
-Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 958, p < 0.001). The change point was located at 8/25/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). There were no significant monotonic trends present for pH, PAR, and conductivity at Toolik Lake from June 2010 - August 2014. Water tempature at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = -432, p = 0.01). The change point was located at 8/17/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). Finally, dissolved oxygen concentration at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 423, p = 0.012). The change point was located at 8/03/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p = 0.0043 ).
+Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 958, p < 0.001; Figure \ref{fig:fig7}). The change point was located at 8/25/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). There were no significant monotonic trends present for pH, PAR, and conductivity at Toolik Lake from June 2010 - August 2014. Water tempature at Toolik Lake from June 2010 - August 2012 showed a significant negative trend (Mann-Kendall;s = -432, p = 0.01; Figure \ref{fig:fig7}). The change point was located at 8/17/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p < 0.0001 ). Finally, dissolved oxygen concentration at Toolik Lake from June 2010 - August 2012 showed a significant positive trend (Mann-Kendall;s = 423, p = 0.012; Figure \ref{fig:fig7}). The change point was located at 8/03/2012 and there were no significant monotonic trends from August 2012- August 2014 (Pettitt Test; k = 33; p = 0.0043 ).
+
+```{r fig7, echo=FALSE, warning=FALSE, fig.cap ="\\label{fig:fig7}The plot above shows the constituents: chlorophyll a concentration, water temperature, & dissolved oxygen that experience significant monotonic trends during the time frame of June, 2010 - August 2014. The dash lines represent the change points of the monotonic trend for each constituent and the solid lines represent the direction of the trend. There were no significant trends that occurred after August, 2012. ", fig.width=11, fig.height=10, fig.pos='H'}
+             
+##### 1 plot for mann kendal trend test ( total of 6 graphs that will be grouped togehter)
+
+          # filter out samples for single depth (depth == 0)
+             
+             ARC.PhysChem.Toolik_zero.processed<- ARC.PhysChem.Toolik.processed %>%
+               filter(Depth_m == 0)
+             
+    # A Chla vs. time plot for toolik lake with change points and trend line for parts with significant trends
+            
+             CHLA_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Chla_ug, color = Chla_ug)) +
+               geom_point()+
+               theme_Final_Project+
+               #scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
+               xlab("Date")+
+               ylab(expression("Chloropyll a Concentration"~"("*mu*g/L*")"))+
+               ggtitle(" Chlorophyll a Concentrations vs. Time for Toolik Lake")+
+               theme(plot.title = element_text(hjust = 0.5))+
+               labs(color = expression("Chla Conc."~"("*mu*g/L*")"))+
+               scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+               theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+               scale_color_gradient(low="blue", high="green")+
+               geom_vline(xintercept=as.Date("2012-08-25"), linetype="dashed", col = 'black')+
+               geom_smooth(method=lm,se=TRUE, col = "black")+
+               theme(panel.background = element_rect(fill = "white", 
+                                                     size = 2, linetype = "solid"))+
+               theme(panel.grid.major.y =element_blank())
+             
+             
+             
+             # B Water Temperature vs. time plot for toolik lake with change points and trend line for parts with significant trends
+             
+             TEMP_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Temp_C, color = Temp_C)) +
+               geom_point()+
+               theme_Final_Project+
+               #scale_colour_manual(values = c('#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60'))+
+               xlab("Date")+
+               ylab(expression("Water Temperature"*~degree*C))+
+               ggtitle(" Water Temperature vs. Time for Toolik Lake")+
+               theme(plot.title = element_text(hjust = 0.5))+
+               labs(color=expression("Temp."*~degree*C))+
+               scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+               theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+               scale_color_gradient(low="blue", high="red")+
+               geom_vline(xintercept=as.Date("2012-08-03"), linetype="dashed", col = 'black')+
+               geom_smooth(method=lm,se=TRUE, col = "black", show.legend = TRUE)+
+               theme(panel.background = element_rect(fill = "white", 
+                                                     size = 2, linetype = "solid"))+
+               theme(panel.grid.major.y =element_blank())
+             
+             
+            
+          
+            
+            # C DO vs. time plot for toolik lake with change points and trend line for parts with significant trends
+            
+            
+            DO_Time_Toolik_PLOT <-  ggplot(ARC.PhysChem.Toolik_zero.processed, aes(x= Date, y= Dissolved_Oxygen, color = Dissolved_Oxygen)) +
+              geom_point()+
+              theme_Final_Project+
+              xlab("Date")+
+              ylab("Dissolved Oxygen (mg/L)")+
+              ggtitle("Dissolved Oxygen vs. Time for Toolik Lake")+
+              theme(plot.title = element_text(hjust = 0.5))+
+              labs(color='DO (mg/L)')+
+              scale_x_date(date_breaks = "3 month", date_labels = "%m/%Y")+
+              theme(axis.text.x = element_text(angle = 45,  hjust = 1))+
+              scale_color_gradient(low="red", high="blue")+
+              geom_vline(xintercept=as.Date("2012-08-17"), linetype="dashed", col = 'black')+
+              geom_smooth(method=lm,se=TRUE, col = "black", show.legend = TRUE)+
+              theme(panel.background = element_rect(fill = "white", 
+                                                    size = 2, linetype = "solid"))+
+              theme(panel.grid.major.y =element_blank())
+          
+             
+            # use gg arrange to put all the plots together 
+            
+            Mann_Kendall_Plot <- ggarrange(CHLA_Time_Toolik_PLOT,TEMP_Time_Toolik_PLOT,  DO_Time_Toolik_PLOT,  ncol = 1, nrow = 3)
+            MAnn_Kendall_Plot_complete<-annotate_figure(Mann_Kendall_Plot,
+                                                         top = text_grob(" Mann- Kendall Trend Analysis for Toolik Lake", color = "black", face = "bold", size = 16, hjust = 0.625))
+            
+            
+            MAnn_Kendall_Plot_complete
+```
+
 
 
 
@@ -1078,11 +1253,7 @@ Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed 
  
  
  #Toolik lake mann-kendall test intial for chla 
- 
-             # filter out samples for single depth (depth == 0)
-             
-             ARC.PhysChem.Toolik_zero.processed<- ARC.PhysChem.Toolik.processed %>%
-               filter(Depth_m == 0)
+
              
              # Initial Mann Kendall Test
              mk.test(ARC.PhysChem.Toolik_zero.processed$Chla_ug)
@@ -1169,5 +1340,27 @@ Chlorophyll a concentrations at Toolik Lake from June 2010 - August 2012 showed 
 # Summary and Conclusions
 <Summarize your major findings from your analyses. What conclusions do you draw from your findings? Make sure to apply this to a broader application for the research question you have answered.>
 
+Most of the five lakes (Toolik, E5, I7, I5, and Fog 2) were significantly different in terms of physical and chemical parameters (Figure \ref{fig:fig4}). The separation of the lakes in the  same general location near the Toolik Field station has allowed them to have contrasting physical and chemical water quality parameters. However, the lakes that were closer together such as I5 and I7 did not differ that much significantly. The size and volume of the lake is most likely a contributing factor to the physical and chemical composition of the lakes. I did not have access to these measurements with my dataset. 
 
+Additionally, I determined that water temperature, pH, secchi depth, and photosynthetically active radiation are significantly predictors for chlorophyll a concentrations in Lakes near the Toolik Field station (Figure \ref{fig:fig5}). As the water temperature, pH, secchi depth, and photosynthetically active radiation increased, there was a decrease in chlorophyll a concentrations. Nutrient concentration measurements within in the lakes are also key to create a more complete model due to the fact that arctic lakes such as Toolik Lake are nutrient limited (O'Brien et al., 1997). The increase in PAR intensity decreasing chlorophyll a concentrations is plausible because higher intensities of PAR can lead to increases in other chlorophyll pigments (Donahue et al., 2003). There is also a strong correlation between chlorophyll a concentration and secchi depth (Hessen 2006). Secchi depth increases when water is clearer and an increase chlorophyll a concentration decreases water clarity. The increase in temperature and pH decreasing chlorophyll a concentrations is not what I would have expected. Other arctic lakes had the highest chlorophyll concentrations when the pH and temperature were the highest in the late summer (French & Petticrew 2007). The decrease in nutrients that occurs near the end of summer could be the reason for the decreases in chl a concentrations and misrepresentation of the relationship of pH and water temperature with chlorophyll a concentrations(O'Brien et al., 1997).  
+
+
+There was positive increasing trends for chlorophyll a concentration and dissolved oxygen between June, 2010 to August, 2012. The increase in chlorophyll a concentration could be due to the increase in annual temperatures and increased mixing within the arctic lakes (Michelutti et al., 2005). The increase in dissolved oxygen could probably be attributed to the increase in chlorophyll a concentrations because photosynthesis produces oxygen. There was also a decreasing trend of water temperature from June, 2010 to August, 2012. This could be due to later ice off periods or changes in wind patterns. Air temperature and additional climatic information is needed to determine the cause of the colder water water temperatures from 2010-2012. 
+
+
+The lakes near the Toolik Field station are significantly different and have several monotonic trends over the course of the study period. However, longer sampling periods are necessary to gain a better understanding of the physical and chemical water quality parameters at the lakes. Nutrient concentration sampling is key to understand the chlorophyll a  fluctuations because the lakes are most likely nutrient-limited. To understand the significant predictors of chlorophyll a concentrations in the arctic, there has to be nutrient water quality sampling and an increase in sampling frequency among the lakes.  
+ 
+
+\newpage
+
+# References
+
+Donahue, William F., et al. "The role of solar radiation in structuring the shallow benthic communities of boreal forest lakes." Limnology and Oceanography 48.1 (2003): 31-47.
+
+French, T. D., & Petticrew, E. L. (2007). Chlorophyll a seasonality in four shallow eutrophic lakes (northern British Columbia, Canada) and the critical roles of internal phosphorus loading and temperature. Hydrobiologia, 575(1), 285-299.
+Hessen, D. O. (2006). Determinants of seston C: P‐ratio in lakes. Freshwater Biology, 51(8), 1560-1569.
+
+Michelutti, N., Wolfe, A. P., Vinebrooke, R. D., Rivard, B., & Briner, J. P. (2005). Recent primary production increases in arctic lakes. Geophysical Research Letters, 32(19).
+
+O’Brien, W. J., Bahr, M., Hershey, A. E., Hobbie, J. E., Kipphut, G. W., Kling, G. W., ... & Vestal, J. R. (1997). The limnology of Toolik lake. In Freshwaters of Alaska (pp. 61-106). Springer, New York, NY.
 
