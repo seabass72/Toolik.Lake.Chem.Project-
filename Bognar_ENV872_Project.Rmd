@@ -8,10 +8,10 @@ output:
     fig_caption: yes
     number_sections: yes
 geometry: margin=2.54cm
-title: 
+title: The Effects of Physical and Chemical Water Quality Parameters on Lakes Located in the Artic Region of Alaska
 subtitle: "https://github.com/seabass72/Toolik.Lake.Chem.Project-"
 author: "Sebastian Bognar"
-abstract: "Experimental overview. This section should be no longer than 250 words."
+abstract: "The arctic region of Alaska is a interesting and complex ecosystem. The dataset that was used for the analysis sampled 74 lakes for various physical and chemical water quality parameters during the summers from 2010-2014 near the Toolik Field Station. The objectives of the study was to determine if the five major lakes were significantly different, find any monotonic trends that existed during the study period, and determine which chemical and physical parameters had a significant effect on chlorophyll a concentrations. I used kruskal-wallis tests, dunn tests, a multiple linear regression, and mann-kendall tests to perform my statistical Analysis. I found that most of the five major lakes were significantly different from one another in regards to Water Temperature, Conductivity, pH, Dissolved Oxygen, Chla Concentration, and PAR. Using a multiple linear regression, I found that pH, water temperature, secchi depth, and PAR were significant factors in predicting chlorophyll a concentrations (MLR; p < 0.0001; R^2 = 0.391). Finally, there were positive trends for chlorophyll a concentration and dissolved oxygen and a negative trend for water temperature from June, 2010 - August, 2012. The location and geomorphology of the lakes are likely contributors to the differences that arise between the lakes. The predictors of chlorophyll a concentrations need additional research to understand the complex dynamics of chlorophyll a concentrations. The trends experienced could be to attributed increases in air temperature and temporal weather patterns.   "
 fontsize: 12pt
 mainfont: Times New Roman
 ---
@@ -79,6 +79,8 @@ theme_Final_Project <- theme_classic(base_size = 12) +
 # Research Question and Rationale
 
 <Paragraph detailing the rationale for your analysis. What is the significant application and/or interest in this topic? Connect to environmental topic(s)/challenge(s).>
+
+The arctic region of Alaska is a diverse and an ecologically important landscape. There has been a substantial amount of research done at the lakes located near the Toolik Field station in the past. However, there has not been much research looking at the the lakes in the recent past (2010-2019). My interest is to look at how these systems are reacting to current climate conditions. I want to understand if the lakes are different and what factors would be helpful to predict chlorophyll a concentrations. Additionally, I want to understand if there are trends that have occurred during the study period (2010-2014). Understanding the factors that are important in predicting chlorophyll a concentrations in these lakes could help understand the chlorophyll dynamics in lakes that are located in the arctic belt around the world. Finally, understanding the trends between 2010-2014 could help us understand if climate change is impacting and altering the dynamics of these systems. 
 
 <Paragraph detailing your research question(s) and goals. What do you want to find out? Include a sentence (or a few) on the dataset you are using to answer this question - just enough to give your reader an idea of where you are going with the analysis.>
 
